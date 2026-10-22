@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Veridit — Minha conta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Instrument+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFFFFF}
+a{color:#111111}a:hover{color:#B0102A}
+</style>
+</head>
+<body>
+<div style="min-height: 100vh; background: #FFFFFF; color: #111111; font-family: 'Instrument Sans', system-ui, sans-serif">
+  <div style="max-width: 1240px; margin: 0 auto; padding: 0 40px; box-sizing: border-box">
+
+    <header style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0 18px; border-bottom: 2px solid #111111">
+      <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 34px; letter-spacing: 3px">VERIDIT</span>
+      <nav aria-label="Menu principal" style="display: flex; flex-wrap: wrap; gap: 4px; font-size: 13px; font-weight: 600; letter-spacing: 1.6px; text-transform: uppercase">
+        <a href="04_Painel.html" style="text-decoration: none; padding: 12px 12px; color: #4A4A4A">Painel</a>
+        <a href="05_Capturar.html" style="text-decoration: none; padding: 12px 12px; color: #4A4A4A">Capturar</a>
+        <a href="06_Registros.html" style="text-decoration: none; padding: 12px 12px; color: #4A4A4A">Registros</a>
+        <a href="09_Creditos.html" style="text-decoration: none; padding: 12px 12px; color: #4A4A4A">Créditos</a>
+        <a href="12_Conta.html" aria-current="page" style="text-decoration: none; padding: 12px 12px; border-bottom: 2px solid #111111">Conta</a>
+      </nav>
+    </header>
+
+    <div style="padding: 40px 0 28px; display: flex; flex-direction: column; gap: 10px; border-bottom: 1px solid #111111">
+      <span style="font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">Conta de advogado</span>
+      <h1 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 60px; line-height: 1; letter-spacing: -1px">Minha conta</h1>
+    </div>
+
+    <main style="display: flex; flex-wrap: wrap; gap: 0; padding-bottom: 56px">
+      <nav aria-label="Seções da conta" style="flex: 1 1 220px; padding: 28px 32px 0 0; box-sizing: border-box; display: flex; flex-direction: column; font-size: 15px">
+        <a href="#dados" style="text-decoration: none; padding: 12px 0; border-bottom: 1px solid #D4D4D4; font-weight: 700">Dados pessoais</a>
+        <a href="#seguranca" style="text-decoration: none; padding: 12px 0; border-bottom: 1px solid #D4D4D4; color: #4A4A4A">Segurança</a>
+        <a href="#avisos" style="text-decoration: none; padding: 12px 0; border-bottom: 1px solid #D4D4D4; color: #4A4A4A">Avisos por e-mail</a>
+        <a href="01_Login.html" style="text-decoration: none; padding: 12px 0; color: #B0102A; font-weight: 600">Sair da conta</a>
+      </nav>
+
+      <div style="flex: 999 1 640px; min-width: 0; border-left: 1px solid #111111; padding: 28px 0 0 48px; box-sizing: border-box; display: flex; flex-direction: column; gap: 40px">
+        <section id="dados" aria-labelledby="h-dados" style="display: flex; flex-direction: column; gap: 22px">
+          <h2 id="h-dados" style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 32px">Dados pessoais</h2>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 32px">
+            <label style="grid-column: span 2; display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">Nome completo
+              <input type="text" value="Júlio Cesar Coelho" style="border: 0; border-bottom: 1.5px solid #111111; padding: 8px 0 10px; font: 400 17px 'Instrument Sans', sans-serif; letter-spacing: 0; text-transform: none; color: #111111; outline: 0; background: transparent"></label>
+            <label style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">E-mail
+              <input type="email" value="julio@exemplo.com.br" style="border: 0; border-bottom: 1.5px solid #111111; padding: 8px 0 10px; font: 400 17px 'Instrument Sans', sans-serif; letter-spacing: 0; text-transform: none; color: #111111; outline: 0; background: transparent"></label>
+            <label style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">Telefone
+              <input type="tel" value="(71) 00000-0000" style="border: 0; border-bottom: 1.5px solid #111111; padding: 8px 0 10px; font: 400 17px 'Instrument Sans', sans-serif; letter-spacing: 0; text-transform: none; color: #111111; outline: 0; background: transparent"></label>
+            <label style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">CPF
+              <input type="text" value="000.000.000-00" disabled style="border: 0; border-bottom: 1.5px dashed #9A9A9A; padding: 8px 0 10px; font: 400 17px 'Instrument Sans', sans-serif; letter-spacing: 0; text-transform: none; color: #6B6B6B; outline: 0; background: transparent"></label>
+            <label style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">OAB
+              <input type="text" value="[UF 000000]" style="border: 0; border-bottom: 1.5px solid #111111; padding: 8px 0 10px; font: 400 17px 'Instrument Sans', sans-serif; letter-spacing: 0; text-transform: none; color: #111111; outline: 0; background: transparent"></label>
+          </div>
+          <button type="button" style="align-self: flex-start; background: #111111; color: #FFFFFF; border: 0; height: 50px; padding: 0 24px; font: 700 13px 'Instrument Sans', sans-serif; letter-spacing: 1.4px; text-transform: uppercase; cursor: pointer">Salvar alterações</button>
+        </section>
+
+        <section id="seguranca" aria-labelledby="h-seg" style="display: flex; flex-direction: column; gap: 18px; border-top: 1px solid #111111; padding-top: 32px">
+          <h2 id="h-seg" style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 32px">Segurança</h2>
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px 32px">
+            <label style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">Senha atual
+              <input type="password" style="border: 0; border-bottom: 1.5px solid #111111; padding: 8px 0 10px; font: 400 17px 'Instrument Sans', sans-serif; color: #111111; outline: 0; background: transparent"></label>
+            <label style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">Nova senha
+              <input type="password" style="border: 0; border-bottom: 1.5px solid #111111; padding: 8px 0 10px; font: 400 17px 'Instrument Sans', sans-serif; color: #111111; outline: 0; background: transparent"></label>
+            <label style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">Repita a nova senha
+              <input type="password" style="border: 0; border-bottom: 1.5px solid #111111; padding: 8px 0 10px; font: 400 17px 'Instrument Sans', sans-serif; color: #111111; outline: 0; background: transparent"></label>
+          </div>
+          <button type="button" style="align-self: flex-start; border: 1.5px solid #111111; background: #FFFFFF; height: 50px; padding: 0 24px; font: 700 13px 'Instrument Sans', sans-serif; letter-spacing: 1.4px; text-transform: uppercase; cursor: pointer; color: #111111">Alterar senha</button>
+        </section>
+
+        <section id="avisos" aria-labelledby="h-av" style="display: flex; flex-direction: column; gap: 10px; border-top: 1px solid #111111; padding-top: 32px">
+          <h2 id="h-av" style="margin: 0 0 8px; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 32px">Avisos por e-mail</h2>
+          <label style="display: flex; align-items: center; gap: 12px; font-size: 15px; min-height: 40px"><input type="checkbox" checked style="width: 18px; height: 18px; accent-color: #111111">Captura concluída, com link para o relatório</label>
+          <label style="display: flex; align-items: center; gap: 12px; font-size: 15px; min-height: 40px"><input type="checkbox" checked style="width: 18px; height: 18px; accent-color: #111111">Captura com falha e crédito devolvido</label>
+          <label style="display: flex; align-items: center; gap: 12px; font-size: 15px; min-height: 40px"><input type="checkbox" checked style="width: 18px; height: 18px; accent-color: #111111">Pagamento confirmado</label>
+        </section>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>

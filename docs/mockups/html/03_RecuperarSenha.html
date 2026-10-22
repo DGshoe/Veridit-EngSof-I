@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Veridit — Recuperar senha</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Instrument+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFFFFF}
+a{color:#111111}a:hover{color:#B0102A}
+</style>
+</head>
+<body>
+<div style="min-height: 100vh; background: #FFFFFF; color: #111111; font-family: 'Instrument Sans', system-ui, sans-serif">
+  <div style="max-width: 1240px; margin: 0 auto; padding: 0 40px; box-sizing: border-box">
+
+    <header style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0 18px; border-bottom: 2px solid #111111">
+      <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 34px; letter-spacing: 3px">VERIDIT</span>
+      <a href="01_Login.html" style="font-size: 14px; font-weight: 600; padding: 10px 0">← Voltar para o login</a>
+    </header>
+
+    <div style="padding: 48px 0 20px; display: flex; flex-direction: column; gap: 12px; border-bottom: 1px solid #111111">
+      <span style="font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">Recuperação de acesso</span>
+      <h1 style="margin: 0 0 20px; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 60px; line-height: 1; letter-spacing: -1px">Esqueceu a senha? Vamos resolver.</h1>
+    </div>
+
+    <main style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0">
+      <section aria-labelledby="p1" style="padding: 40px 48px 56px 0; border-right: 1px solid #111111; display: flex; flex-direction: column; gap: 22px">
+        <span style="font-family: 'Instrument Serif', serif; font-size: 40px; line-height: 1">01</span>
+        <h2 id="p1" style="margin: 0; font-size: 20px; font-weight: 700">Informe seu e-mail</h2>
+        <p style="margin: 0; font-size: 15px; color: #4A4A4A; line-height: 1.55">Enviaremos um link para criar uma nova senha. O link vale por 60 minutos.</p>
+        <label style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">E-mail cadastrado
+          <input type="email" value="julio@exemplo.com.br" style="border: 0; border-bottom: 1.5px solid #111111; padding: 8px 0 10px; font: 400 18px 'Instrument Sans', sans-serif; letter-spacing: 0; text-transform: none; color: #111111; outline: 0; background: transparent"></label>
+        <button type="button" style="align-self: flex-start; background: #111111; color: #FFFFFF; border: 0; height: 52px; padding: 0 26px; font: 700 14px 'Instrument Sans', sans-serif; letter-spacing: 1.4px; text-transform: uppercase; cursor: pointer">Enviar link →</button>
+        <p role="status" style="margin: 0; display: flex; gap: 10px; align-items: center; font-size: 14px; color: #1D6B3E; font-weight: 600"><span style="width: 9px; height: 9px; background: #1D6B3E"></span>Se o e-mail estiver cadastrado, o link chega em instantes.</p>
+      </section>
+
+      <section aria-labelledby="p2" style="padding: 40px 0 56px 48px; display: flex; flex-direction: column; gap: 22px">
+        <span style="font-family: 'Instrument Serif', serif; font-size: 40px; line-height: 1">02</span>
+        <h2 id="p2" style="margin: 0; font-size: 20px; font-weight: 700">Defina a nova senha</h2>
+        <p style="margin: 0; font-size: 15px; color: #4A4A4A; line-height: 1.55">Tela aberta a partir do link recebido por e-mail.</p>
+        <label style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">Nova senha
+          <input type="password" placeholder="Mínimo de 8 caracteres" style="border: 0; border-bottom: 1.5px solid #111111; padding: 8px 0 10px; font: 400 18px 'Instrument Sans', sans-serif; letter-spacing: 0; text-transform: none; color: #111111; outline: 0; background: transparent"></label>
+        <label style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">Repita a nova senha
+          <input type="password" style="border: 0; border-bottom: 1.5px solid #111111; padding: 8px 0 10px; font: 400 18px 'Instrument Sans', sans-serif; letter-spacing: 0; text-transform: none; color: #111111; outline: 0; background: transparent"></label>
+        <a href="01_Login.html" style="align-self: flex-start; display: flex; align-items: center; background: #111111; color: #FFFFFF; height: 52px; padding: 0 26px; text-decoration: none; font-size: 14px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase">Salvar e entrar →</a>
+      </section>
+    </main>
+  </div>
+</div>
+</body>
+</html>

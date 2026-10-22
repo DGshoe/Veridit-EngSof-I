@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Veridit — Login</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Instrument+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFFFFF}
+a{color:#111111}a:hover{color:#B0102A}
+</style>
+</head>
+<body>
+<div style="min-height: 100vh; background: #FFFFFF; color: #111111; font-family: 'Instrument Sans', system-ui, sans-serif">
+  <div style="max-width: 1240px; margin: 0 auto; padding: 0 40px; box-sizing: border-box">
+
+    <header style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0 18px; border-bottom: 2px solid #111111">
+      <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 34px; letter-spacing: 3px">VERIDIT</span>
+      <span style="font-size: 14px; color: #4A4A4A">Ainda não tem conta? <a href="02_Cadastro.html" style="font-weight: 600">Criar conta →</a></span>
+    </header>
+
+    <main style="display: flex; flex-wrap: wrap; gap: 0; border-bottom: 1px solid #111111">
+      <section style="flex: 1 1 520px; min-width: 0; padding: 64px 56px 64px 0; box-sizing: border-box; display: flex; flex-direction: column; gap: 36px; border-right: 1px solid #111111">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">Prova digital de páginas da internet</span>
+        <h1 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 72px; line-height: 1; letter-spacing: -1px">Toda prova começa com um <em style="font-style: italic; color: #B0102A">registro</em>.</h1>
+        <ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; border-top: 1px solid #111111">
+          <li style="display: flex; gap: 24px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid #D4D4D4"><span style="font-family: 'Instrument Serif', serif; font-size: 26px; width: 40px">01</span><span style="font-size: 16px">Cole o endereço da página que deseja preservar.</span></li>
+          <li style="display: flex; gap: 24px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid #D4D4D4"><span style="font-family: 'Instrument Serif', serif; font-size: 26px; width: 40px">02</span><span style="font-size: 16px">Escolha captura de tela ou vídeo de navegação.</span></li>
+          <li style="display: flex; gap: 24px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid #D4D4D4"><span style="font-family: 'Instrument Serif', serif; font-size: 26px; width: 40px">03</span><span style="font-size: 16px">Receba relatório com hash e data, pronto para anexar.</span></li>
+        </ol>
+      </section>
+
+      <section aria-labelledby="entrar" style="flex: 1 1 400px; min-width: 0; padding: 64px 0 64px 56px; box-sizing: border-box; display: flex; flex-direction: column; gap: 28px">
+        <h2 id="entrar" style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 44px">Entrar</h2>
+        <form style="display: flex; flex-direction: column; gap: 26px">
+          <label style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">E-mail
+            <input type="email" value="julio@exemplo.com.br" style="border: 0; border-bottom: 1.5px solid #111111; padding: 8px 0 10px; font: 400 18px 'Instrument Sans', sans-serif; letter-spacing: 0; text-transform: none; color: #111111; outline: 0; background: transparent"></label>
+          <label style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">Senha
+            <input type="password" value="senhaexemplo" style="border: 0; border-bottom: 1.5px solid #111111; padding: 8px 0 10px; font: 400 18px 'Instrument Sans', sans-serif; letter-spacing: 0; text-transform: none; color: #111111; outline: 0; background: transparent"></label>
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px">
+            <label style="display: flex; align-items: center; gap: 10px; font-size: 14px; min-height: 44px"><input type="checkbox" style="width: 18px; height: 18px; accent-color: #111111">Manter conectado</label>
+            <a href="03_RecuperarSenha.html" style="font-size: 14px; font-weight: 600; padding: 10px 0">Esqueci minha senha</a>
+          </div>
+          <a href="04_Painel.html" style="display: flex; align-items: center; justify-content: center; background: #111111; color: #FFFFFF; height: 54px; text-decoration: none; font-size: 14px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase">Entrar →</a>
+        </form>
+        <p style="margin: 0; font-size: 13px; color: #4A4A4A; line-height: 1.5; border-top: 1px solid #D4D4D4; padding-top: 18px">Acesso restrito a usuários cadastrados. Seus registros só ficam visíveis para você.</p>
+      </section>
+    </main>
+
+    <footer style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding: 16px 0 28px; font-size: 13px; color: #4A4A4A">
+      <span>© Veridit</span>
+      <span><a href="#" style="color: #4A4A4A">Termos de uso</a>  ·  <a href="#" style="color: #4A4A4A">Privacidade</a></span>
+    </footer>
+  </div>
+</div>
+</body>
+</html>

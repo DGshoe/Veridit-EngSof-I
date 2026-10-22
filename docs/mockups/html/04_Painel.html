@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Veridit — Painel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Instrument+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFFFFF}
+a{color:#111111}a:hover{color:#B0102A}
+</style>
+</head>
+<body>
+<div style="min-height: 100vh; background: #FFFFFF; color: #111111; font-family: 'Instrument Sans', system-ui, sans-serif">
+  <div style="max-width: 1240px; margin: 0 auto; padding: 0 40px; box-sizing: border-box">
+
+    <header style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0 18px; border-bottom: 2px solid #111111">
+      <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 34px; letter-spacing: 3px">VERIDIT</span>
+      <nav aria-label="Menu principal" style="display: flex; flex-wrap: wrap; gap: 4px; font-size: 13px; font-weight: 600; letter-spacing: 1.6px; text-transform: uppercase">
+        <a href="04_Painel.html" aria-current="page" style="text-decoration: none; padding: 12px 12px; border-bottom: 2px solid #111111">Painel</a>
+        <a href="05_Capturar.html" style="text-decoration: none; padding: 12px 12px; color: #4A4A4A">Capturar</a>
+        <a href="06_Registros.html" style="text-decoration: none; padding: 12px 12px; color: #4A4A4A">Registros</a>
+        <a href="09_Creditos.html" style="text-decoration: none; padding: 12px 12px; color: #4A4A4A">Créditos</a>
+        <a href="12_Conta.html" style="text-decoration: none; padding: 12px 12px; color: #4A4A4A">Conta</a>
+      </nav>
+    </header>
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding: 10px 0; border-bottom: 1px solid #111111; font-size: 13px; color: #4A4A4A">
+      <span>Terça-feira, 13 de outubro de 2026</span>
+      <span>Dr. Júlio Cesar · Advogado · OAB [UF 000000]</span>
+    </div>
+
+    <section style="display: flex; flex-wrap: wrap; gap: 48px; padding: 44px 0 40px; border-bottom: 1px solid #111111">
+      <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 30px">
+        <h1 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 68px; line-height: 1.02; letter-spacing: -1px">Registre o que está na tela. <em style="font-style: italic; color: #B0102A">Prove</em> o que aconteceu.</h1>
+        <form style="display: flex; flex-direction: column; gap: 18px">
+          <label for="url-e" style="font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">Endereço a registrar</label>
+          <input id="url-e" type="url" placeholder="https://" value="https://loja-exemplo.com.br/produto/123" style="border: 0; border-bottom: 2px solid #111111; padding: 6px 0 12px; font: 400 26px 'Instrument Serif', Georgia, serif; color: #111111; outline: 0; background: transparent">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+            <label style="display: flex; align-items: center; gap: 8px; border: 1.5px solid #111111; background: #111111; color: #FFFFFF; padding: 0 16px; min-height: 44px; font-size: 14px; font-weight: 600; cursor: pointer"><input type="radio" name="tipo-e" checked style="accent-color: #FFFFFF">Captura de tela</label>
+            <label style="display: flex; align-items: center; gap: 8px; border: 1.5px solid #111111; padding: 0 16px; min-height: 44px; font-size: 14px; font-weight: 600; cursor: pointer"><input type="radio" name="tipo-e" style="accent-color: #111111">Vídeo de navegação</label>
+            <button type="submit" style="margin-left: auto; background: #111111; color: #FFFFFF; border: 0; height: 52px; padding: 0 26px; font: 700 14px 'Instrument Sans', sans-serif; letter-spacing: 1.4px; text-transform: uppercase; cursor: pointer">Registrar agora →</button>
+          </div>
+        </form>
+      </div>
+      <aside style="flex: 1 1 280px; display: flex; flex-direction: column; align-items: center; gap: 22px; border-left: 1px solid #111111; padding-left: 40px; box-sizing: border-box">
+        <svg width="170" height="170" viewBox="0 0 200 200" role="img" aria-label="Selo de registro autenticado número 0027" style="transform: rotate(-8deg)">
+          <defs><path id="anel" d="M100,100 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0"></path></defs>
+          <circle cx="100" cy="100" r="92" fill="none" stroke="#B0102A" stroke-width="3"></circle>
+          <circle cx="100" cy="100" r="56" fill="none" stroke="#B0102A" stroke-width="1.5"></circle>
+          <text font-family="Instrument Sans, sans-serif" font-size="15" font-weight="700" letter-spacing="4" fill="#B0102A"><textPath href="#anel">VERIDIT · REGISTRO AUTENTICADO ·</textPath></text>
+          <text x="100" y="96" text-anchor="middle" font-family="Instrument Sans, sans-serif" font-size="12" font-weight="700" letter-spacing="2" fill="#B0102A">Nº</text>
+          <text x="100" y="126" text-anchor="middle" font-family="Instrument Serif, serif" font-size="34" fill="#B0102A">0027</text>
+        </svg>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px">
+          <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 72px; line-height: 1">12</span>
+          <span style="font-size: 13px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">créditos disponíveis</span>
+          <a href="09_Creditos.html" style="margin-top: 8px; font-size: 15px; font-weight: 600; padding: 10px 0">Comprar pacote →</a>
+        </div>
+      </aside>
+    </section>
+
+    <section aria-labelledby="livro" style="padding: 36px 0 56px">
+      <div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 14px">
+        <h2 id="livro" style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 38px">Livro de registros</h2>
+        <a href="06_Registros.html" style="font-size: 14px; font-weight: 600">Ver todos os 27 registros →</a>
+      </div>
+      <div style="overflow-x: auto">
+        <table style="width: 100%; min-width: 860px; border-collapse: collapse; font-size: 15px">
+          <thead>
+            <tr style="text-align: left; font-size: 11px; letter-spacing: 1.6px; text-transform: uppercase; border-top: 2px solid #111111; border-bottom: 1px solid #111111">
+              <th style="padding: 12px 8px 12px 0; font-weight: 700">Nº</th>
+              <th style="padding: 12px 8px; font-weight: 700">Endereço</th>
+              <th style="padding: 12px 8px; font-weight: 700">Tipo</th>
+              <th style="padding: 12px 8px; font-weight: 700">Registrado em</th>
+              <th style="padding: 12px 8px; font-weight: 700">Hash SHA-256</th>
+              <th style="padding: 12px 8px; font-weight: 700">Situação</th>
+              <th style="padding: 12px 0 12px 8px; font-weight: 700; text-align: right">Documentos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #D4D4D4">
+              <td style="padding: 16px 8px 16px 0; font-family: 'Instrument Serif', serif; font-size: 22px">0027</td>
+              <td style="padding: 16px 8px; font-weight: 600">loja-exemplo.com.br/produto/123</td>
+              <td style="padding: 16px 8px">Tela</td>
+              <td style="padding: 16px 8px">13.10.2026 · 14h02</td>
+              <td style="padding: 16px 8px; font-family: 'IBM Plex Mono', monospace; font-size: 13px">9f2c…a71e</td>
+              <td style="padding: 16px 8px"><span style="display: inline-flex; align-items: center; gap: 8px"><span style="width: 9px; height: 9px; background: #1D6B3E"></span>Autenticado</span></td>
+              <td style="padding: 16px 0 16px 8px; text-align: right; white-space: nowrap"><a href="07_Detalhe.html">Relatório</a>  ·  <a href="#">.zip</a></td>
+            </tr>
+            <tr style="border-bottom: 1px solid #D4D4D4">
+              <td style="padding: 16px 8px 16px 0; font-family: 'Instrument Serif', serif; font-size: 22px">0026</td>
+              <td style="padding: 16px 8px; font-weight: 600">rede-social-exemplo.com/post/88</td>
+              <td style="padding: 16px 8px">Vídeo</td>
+              <td style="padding: 16px 8px">13.10.2026 · 13h47</td>
+              <td style="padding: 16px 8px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #6B6B6B">aguardando</td>
+              <td style="padding: 16px 8px"><span style="display: inline-flex; align-items: center; gap: 8px"><span style="width: 9px; height: 9px; border: 1.5px solid #111111; box-sizing: border-box"></span>Em gravação</span></td>
+              <td style="padding: 16px 0 16px 8px; text-align: right; color: #6B6B6B">—</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #D4D4D4">
+              <td style="padding: 16px 8px 16px 0; font-family: 'Instrument Serif', serif; font-size: 22px">0025</td>
+              <td style="padding: 16px 8px; font-weight: 600">noticias-exemplo.com.br/materia</td>
+              <td style="padding: 16px 8px">Tela</td>
+              <td style="padding: 16px 8px">12.10.2026 · 18h20</td>
+              <td style="padding: 16px 8px; font-family: 'IBM Plex Mono', monospace; font-size: 13px">41be…09cd</td>
+              <td style="padding: 16px 8px"><span style="display: inline-flex; align-items: center; gap: 8px"><span style="width: 9px; height: 9px; background: #1D6B3E"></span>Autenticado</span></td>
+              <td style="padding: 16px 0 16px 8px; text-align: right; white-space: nowrap"><a href="#">Relatório</a>  ·  <a href="#">.zip</a></td>
+            </tr>
+            <tr style="border-bottom: 1px solid #D4D4D4">
+              <td style="padding: 16px 8px 16px 0; font-family: 'Instrument Serif', serif; font-size: 22px">0024</td>
+              <td style="padding: 16px 8px; font-weight: 600">site-fora-do-ar.com.br</td>
+              <td style="padding: 16px 8px">Tela</td>
+              <td style="padding: 16px 8px">11.10.2026 · 09h15</td>
+              <td style="padding: 16px 8px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #6B6B6B">—</td>
+              <td style="padding: 16px 8px"><span style="display: inline-flex; align-items: center; gap: 8px; color: #B0102A"><span style="width: 9px; height: 9px; background: #B0102A"></span>Falhou · crédito devolvido</span></td>
+              <td style="padding: 16px 0 16px 8px; text-align: right"><a href="#">Tentar de novo</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</div>
+</body>
+</html>
