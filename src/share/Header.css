@@ -11,7 +11,7 @@
 .header-logo {
     font-size: 28px;
     font-weight: bold;
-    color: #0b3b2e; /* Verde escuro da marca */
+    color: #0b3b2e;
     letter-spacing: -1px;
 }
 
@@ -22,7 +22,7 @@
 
 .header-nav a {
     text-decoration: none;
-    color: #2d5a4c; /* Verde mais claro para os links */
+    color: #2d5a4c;
     font-size: 15px;
     transition: color 0.2s;
 }

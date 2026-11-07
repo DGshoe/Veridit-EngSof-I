@@ -1,0 +1,11 @@
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background-color: #f2f5f3; /* Cinza esverdeado bem claro */
+    font-family: sans-serif;
+    font-size: 12px;
+    color: #4a6b5d; /* Tom de verde acinzentado */
+    border-top: 1px solid #e0e0e0;
+}
