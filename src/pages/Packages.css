@@ -1,0 +1,153 @@
+.packages-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Limita a largura total da área de conteúdo da página de pacotes */
+.page-layout-container {
+    max-width: 1000px !important; /* Força o container a ser mais largo que o padrão */
+}
+
+/* Grid para os 3 cards */
+.packages-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    width: 100%;
+    margin-bottom: 32px;
+}
+
+/* Estilo Base do Card */
+.package-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 32px 24px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+/* Destaque para o Pacote Médio */
+.package-card.highlighted {
+    border: 2px solid #0b3b2e;
+    box-shadow: 0 4px 12px rgba(11, 59, 46, 0.08);
+}
+
+.card-header {
+    margin-bottom: 24px;
+}
+
+.card-tag {
+    font-size: 10px;
+    font-weight: 600;
+    color: #4a6b5d;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.card-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #0b3b2e;
+    margin: 0;
+}
+
+.card-body {
+    flex: 1; /* Empurra o botão para o final do card */
+}
+
+.card-credits {
+    margin-bottom: 16px;
+    color: #111827;
+}
+
+.card-credits strong {
+    font-size: 36px;
+    font-weight: 600;
+    letter-spacing: -1px;
+}
+
+.card-credits span {
+    font-size: 14px;
+    color: #4b5563;
+}
+
+.card-price {
+    font-size: 15px;
+    font-weight: 500;
+    color: #111827;
+    margin-bottom: 24px;
+}
+
+.price-detail {
+    font-weight: 400;
+    color: #6b7280;
+    font-size: 13px;
+}
+
+.card-features {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin-bottom: 32px;
+}
+
+.card-features li {
+    font-size: 13px;
+    color: #4b5563;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.card-footer {
+    width: 100%;
+}
+
+.btn-select {
+    width: 100%;
+    background-color: #0b3b2e;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-select:hover {
+    background-color: #07291f;
+}
+
+/* Caixa de aviso inferior */
+.packages-alert {
+    background-color: #f5f7f5;
+    border-left: 3px solid #0b3b2e;
+    padding: 12px 16px;
+    font-size: 12px;
+    color: #4a6b5d;
+    width: 100%;
+    border-radius: 0 4px 4px 0;
+    box-sizing: border-box;
+}
+
+/* Responsividade para telas menores (Tablets e Celulares) */
+@media (max-width: 900px) {
+    .packages-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .packages-grid {
+        grid-template-columns: 1fr;
+    }
+    .page-layout-container {
+        max-width: 100% !important;
+    }
+}

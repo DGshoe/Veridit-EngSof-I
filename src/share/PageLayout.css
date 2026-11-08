@@ -12,7 +12,6 @@
     margin-bottom: 24px;
     text-align: left;
     width: 100%;
-    max-width: 480px;
 }
 
 .page-layout-tag {
@@ -41,7 +40,6 @@
 
 .page-layout-section {
     width: 100%;
-    max-width: 480px;
 }
 
 @media (max-width: 768px) {
