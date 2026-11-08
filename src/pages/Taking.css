@@ -1,0 +1,159 @@
+.taking-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Força o container do PageLayout a ser mais largo para caber as 2 colunas */
+.page-layout-container {
+    max-width: 1000px !important; 
+}
+
+/* Grid de 2 colunas */
+.taking-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    width: 100%;
+}
+
+/* Estilo base dos cards (mesma linha visual dos pacotes) */
+.taking-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 24px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- COLUNA ESQUERDA --- */
+
+.fake-browser {
+    background-color: #f0f4f1; /* Fundo verde/cinza bem claro */
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 24px;
+}
+
+.browser-url {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #4b5563;
+    margin-bottom: 16px;
+    font-family: monospace;
+}
+
+.browser-view {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 4px;
+    border-left: 4px solid #2d5a4c; /* Detalhe verde na borda esquerda */
+}
+
+.browser-view h4 {
+    margin: 0 0 8px 0;
+    color: #111827;
+    font-size: 15px;
+}
+
+.browser-view p {
+    margin: 0 0 8px 0;
+    font-size: 13px;
+    color: #6b7280;
+    line-height: 1.4;
+}
+
+.browser-view p:last-child {
+    margin-bottom: 0;
+}
+
+.taking-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: auto; /* Empurra os botões para o final do card */
+}
+
+.btn-primary {
+    background-color: #0b3b2e;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #07291f;
+}
+
+.btn-text {
+    background: none;
+    border: none;
+    color: #0b3b2e;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0;
+}
+
+.btn-text:hover {
+    text-decoration: underline;
+}
+
+/* --- COLUNA DIREITA --- */
+
+.status-badge {
+    align-self: flex-start;
+    background-color: #eef2ed;
+    color: #4a6b5d;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+}
+
+.taking-title {
+    font-size: 48px;
+    font-weight: 600;
+    color: #0b3b2e;
+    margin: 0 0 16px 0;
+    letter-spacing: -1px;
+}
+
+.taking-description {
+    font-size: 15px;
+    color: #4b5563;
+    line-height: 1.5;
+    margin: 0 0 32px 0;
+}
+
+.taking-alert {
+    background-color: #f2f5f3;
+    border-left: 3px solid #0b3b2e;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #4a6b5d;
+    width: 100%;
+    margin-top: auto; /* Joga o alerta para o final do card */
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+    .taking-content {
+        grid-template-columns: 1fr; /* 1 coluna em celulares */
+    }
+
+    .taking-title {
+        font-size: 36px;
+    }
+}
