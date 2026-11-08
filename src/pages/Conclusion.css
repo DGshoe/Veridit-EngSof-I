@@ -1,0 +1,94 @@
+.conclusion-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Força o container a ter uma largura boa para o card */
+.page-layout-container {
+    max-width: 1000px !important; 
+}
+
+.conclusion-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 32px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    width: 100%;
+    text-align: left;
+}
+
+.status-badge-success {
+    display: inline-block;
+    background-color: #eef2ed; /* Fundo verde bem claro */
+    color: #4a6b5d; /* Texto verde acinzentado */
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 4px;
+    margin-bottom: 24px;
+}
+
+.conclusion-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #0b3b2e;
+    margin: 0 0 8px 0;
+}
+
+.conclusion-id {
+    font-size: 15px;
+    color: #4b5563;
+    margin: 0 0 24px 0;
+    font-weight: 500;
+}
+
+.conclusion-description {
+    font-size: 15px;
+    color: #111827;
+    margin: 0 0 32px 0;
+}
+
+.conclusion-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.btn-primary {
+    background-color: #0b3b2e;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #07291f;
+}
+
+.btn-link {
+    font-size: 14px;
+    color: #0b3b2e;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.btn-link:hover {
+    color: #07291f;
+}
+
+@media (max-width: 768px) {
+    .conclusion-actions {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+}
