@@ -1,207 +1,9 @@
 .recovery-layout {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.recovery-main {
-  flex: 1;
-  background-color: #f4f6f4; 
-  display: flex;
-  justify-content: flex-start; 
-  align-items: flex-start;
-  padding: 60px 10%; 
-}
-
-.recovery-container {
-  width: 100%;
-  max-width: 480px; 
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.recovery-header {
-  margin-bottom: 24px;
-  text-align: left;
-  width: 100%;
-}
-
-.tag-acesso {
-  font-size: 11px;
-  font-weight: 600;
-  color: #4a6b5d;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  display: block;
-  margin-bottom: 12px;
-}
-
-.recovery-header h1 {
-  font-size: 36px;
-  font-weight: 600;
-  color: #0b3b2e; 
-  margin: 0 0 12px 0;
-  letter-spacing: -1px;
-}
-
-.recovery-header p {
-  font-size: 16px;
-  color: #4a6b5d;
-  margin: 0;
-}
-
-.recovery-card {
-  background-color: #ffffff;
-  border-radius: 8px;
-  padding: 32px;
-  width: 100%;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
-  text-align: left; 
-  box-sizing: border-box; 
-}
-
-.recovery-form {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; 
-  width: 100%;
-}
-
-.input-group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 24px;
-  width: 100%; 
-  text-align: left;
-}
-
-.input-group label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #111827;
-  margin-bottom: 8px;
-}
-
-.input-group input {
-  width: 100%;
-  box-sizing: border-box; 
-  padding: 12px 14px;
-  border: 1px solid #d1d5db; 
-  border-radius: 6px;
-  font-size: 15px;
-  outline: none;
-  transition: border-color 0.2s;
-  background-color: transparent; 
-  color: #000000; 
-  color-scheme: light; 
-}
-
-.input-group input:focus {
-  border-color: #0b3b2e;
-  box-shadow: 0 0 0 1px #0b3b2e;
-}
-
-.btn-primary {
-  background-color: #0b3b2e;
-  color: #ffffff;
-  border: none;
-  border-radius: 6px;
-  padding: 12px 24px;
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  align-self: flex-start; 
-}
-
-.btn-primary:hover {
-  background-color: #07291f;
-}
-
-.recovery-footer {
-  margin-top: 32px;
-  width: 100%;
-  text-align: left; 
-}
-
-.link-voltar {
-  font-size: 14px;
-  color: #0b3b2e;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-
-.link-voltar:hover {
-  color: #07291f;
-}
-
-@media (max-width: 768px) {
-  .recovery-main {
-    padding: 40px 20px; 
-  }
-  
-  .recovery-header h1 {
-    font-size: 28px;
-  }
-}* Layout geral da página para empurrar o footer para baixo */
-.recovery-layout {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
 
-/* Área principal com fundo bege/cinza claro */
-.recovery-main {
-    flex: 1;
-    background-color: #f4f6f4; 
-    display: flex;
-    justify-content: flex-start; /* Alinha o conteúdo à esquerda */
-    align-items: flex-start;
-    padding: 60px 10%; /* Distância das margens */
-}
-
-/* Container que limita a largura */
-.recovery-container {
-    width: 100%;
-    max-width: 480px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.recovery-header {
-    margin-bottom: 24px;
-    text-align: left;
-    width: 100%;
-}
-
-.tag-acesso {
-    font-size: 11px;
-    font-weight: 600;
-    color: #4a6b5d;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 12px;
-}
-
-.recovery-header h1 {
-    font-size: 36px;
-    font-weight: 600;
-    color: #0b3b2e;
-    margin: 0 0 12px 0;
-    letter-spacing: -1px;
-}
-
-.recovery-header p {
-    font-size: 16px;
-    color: #4a6b5d;
-    margin: 0;
-}
-
-/* O card branco */
 .recovery-card {
     background-color: #ffffff;
     border-radius: 8px;
@@ -209,22 +11,22 @@
     width: 100%;
     border: 1px solid #e5e7eb;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
-
-    /* 👇 AQUI ESTÁ A CORREÇÃO DO ALINHAMENTO 👇 */
     text-align: left; 
+    box-sizing: border-box; 
 }
 
 .recovery-form {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Garante que o botão não estique */
+    align-items: flex-start; 
+    width: 100%;
 }
 
 .input-group {
     display: flex;
     flex-direction: column;
     margin-bottom: 24px;
-    width: 100%;
+    width: 100%; 
     text-align: left;
 }
 
@@ -235,20 +37,18 @@
     margin-bottom: 8px;
 }
 
-/* 👇 AQUI ESTÁ A CORREÇÃO DO INPUT PRETO 👇 */
 .input-group input {
+    width: 100%;
+    box-sizing: border-box; 
     padding: 12px 14px;
-    border: 1px solid #d1d5db;
+    border: 1px solid #d1d5db; 
     border-radius: 6px;
     font-size: 15px;
     outline: none;
     transition: border-color 0.2s;
-
-    /* Força o modo claro no input */
+    background-color: transparent; 
+    color: #000000; 
     color-scheme: light; 
-    background-color: transparent; /* Fundo transparente */
-    color: #111827; /* Texto escuro/preto */
-    width: 100%;
 }
 
 .input-group input:focus {
@@ -266,8 +66,7 @@
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.2s;
-    /* width: auto garante que o botão fique do tamanho do texto */
-    width: auto; 
+    align-self: flex-start; 
 }
 
 .btn-primary:hover {
@@ -276,8 +75,8 @@
 
 .recovery-footer {
     margin-top: 32px;
-    text-align: left;
     width: 100%;
+    text-align: left; 
 }
 
 .link-voltar {
