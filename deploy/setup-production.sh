@@ -74,7 +74,9 @@ else
       -e "s|^ADMIN_CPF=.*|ADMIN_CPF=$(gen_cpf)|" \
       .env.production.example > "$ENV_FILE"
   chmod 600 "$ENV_FILE" 2>/dev/null || true
-  grep -q 'gerar-' "$ENV_FILE" && { echo "!! Sobrou valor 'gerar-*' em $ENV_FILE" >&2; exit 1; }
+  if grep -qE '^[^#]*=gerar-' "$ENV_FILE"; then
+    echo "!! Sobrou valor 'gerar-*' em $ENV_FILE" >&2; exit 1
+  fi
   echo "   criado com segredos aleatórios (JWT_SECRET e APP_KEY diferentes do dev)"
 fi
 
