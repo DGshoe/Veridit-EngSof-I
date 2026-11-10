@@ -42,6 +42,13 @@ use OpenApi\Attributes as OA;
     name: 'X-Simulator-Signature',
     description: 'HMAC-SHA256 (hex) do corpo bruto com PAYMENTS_SIMULATOR_WEBHOOK_SECRET.',
 )]
+#[OA\SecurityScheme(
+    securityScheme: 'mercadoPagoSignature',
+    type: 'apiKey',
+    in: 'header',
+    name: 'x-signature',
+    description: 'Assinatura do Mercado Pago: "ts=...,v1=..." (HMAC-SHA256 com a chave secreta do webhook).',
+)]
 #[OA\Tag(name: 'Saúde', description: 'Disponibilidade da API')]
 #[OA\Tag(name: 'Catálogo', description: 'Pacotes (D2) e custo das capturas')]
 #[OA\Tag(name: 'Pedidos', description: 'Compra de pacotes (REQ05)')]

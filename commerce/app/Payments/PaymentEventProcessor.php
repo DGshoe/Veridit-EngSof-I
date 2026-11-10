@@ -41,12 +41,7 @@ class PaymentEventProcessor
                 return ProcessingResult::Duplicate;
             }
 
-            /** @var ?Order $order */
-            $order = Order::query()
-                ->where('payment_method', $event->provider->value)
-                ->where('provider_payment_id', $event->providerPaymentId)
-                ->lockForUpdate()
-                ->first();
+            $order = $this->findOrder($event);
 
             $result = $order ? $this->apply($order, $event) : ProcessingResult::Ignored;
 
@@ -69,6 +64,23 @@ class PaymentEventProcessor
         return $result;
     }
 
+    /** Locks the order the event refers to (by our id, when echoed by the provider, or by its payment id). */
+    private function findOrder(ProviderEvent $event): ?Order
+    {
+        $query = Order::query()->where('payment_method', $event->provider->value);
+
+        if ($event->orderId !== null) {
+            if (! Str::isUuid($event->orderId)) {
+                return null;
+            }
+            $query->whereKey($event->orderId);
+        } else {
+            $query->where('provider_payment_id', $event->providerPaymentId);
+        }
+
+        return $query->lockForUpdate()->first();
+    }
+
     private function apply(Order $order, ProviderEvent $event): ProcessingResult
     {
         // A final order never changes again (paid stays paid).
@@ -76,8 +88,26 @@ class PaymentEventProcessor
             return ProcessingResult::Ignored;
         }
 
+        // Paid amount must match the order (defends against a forged/altered charge).
+        if ($event->amountCents !== null && $event->amountCents !== $order->amount_cents) {
+            Log::warning('Valor pago diferente do pedido: evento ignorado.', [
+                'provider' => $event->provider->value,
+                'event_id' => $event->eventId,
+                'order_id' => $order->id,
+                'expected_cents' => $order->amount_cents,
+                'paid_cents' => $event->amountCents,
+            ]);
+
+            return ProcessingResult::Ignored;
+        }
+
         if ($event->status === PaymentStatus::Approved) {
-            $order->update(['status' => OrderStatus::Paid, 'paid_at' => now()]);
+            $order->update([
+                'status' => OrderStatus::Paid,
+                'paid_at' => now(),
+                // Keep the provider's payment id for reconciliation (MP: payment id differs from the preference id)
+                'payment_data' => ($order->payment_data ?? []) + ['paid_payment_id' => $event->providerPaymentId],
+            ]);
 
             [$entry] = $this->wallet->credit($order->user_id, $order->credits, 'compra', 'order', $order->id);
 

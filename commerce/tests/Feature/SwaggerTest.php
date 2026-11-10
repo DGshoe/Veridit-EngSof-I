@@ -20,7 +20,7 @@ class SwaggerTest extends TestCase
     {
         $spec = $this->spec();
 
-        $this->assertSame(['bearerAuth', 'serviceToken', 'simulatorSignature'], array_keys($spec['components']['securitySchemes']));
+        $this->assertSame(['bearerAuth', 'serviceToken', 'simulatorSignature', 'mercadoPagoSignature'], array_keys($spec['components']['securitySchemes']));
         foreach (['Package', 'Order', 'LedgerEntry', 'ValidationError', 'Error', 'PaginationMeta'] as $schema) {
             $this->assertArrayHasKey($schema, $spec['components']['schemas']);
         }
@@ -34,6 +34,7 @@ class SwaggerTest extends TestCase
             'get /api/v1/orders/{id}' => 'bearerAuth',
             'post /api/v1/orders/{id}/simulate' => 'bearerAuth',
             'post /api/v1/webhooks/simulator' => 'simulatorSignature',
+            'post /api/v1/webhooks/mercadopago' => 'mercadoPagoSignature',
             'get /api/v1/wallet' => 'bearerAuth',
             'get /api/v1/wallet/entries' => 'bearerAuth',
             'post /api/v1/internal/credits/consume' => 'serviceToken',

@@ -4,6 +4,7 @@ namespace App\Payments;
 
 use App\Enums\PaymentMethod;
 use App\Exceptions\InvalidWebhookException;
+use App\Exceptions\PaymentProviderUnavailableException;
 use App\Models\Order;
 use Illuminate\Http\Request;
 
@@ -20,8 +21,11 @@ interface PaymentGateway
 
     /**
      * Authenticates (signature) and translates a webhook into a ProviderEvent.
+     * Returns null for authentic notifications that are irrelevant (other topics,
+     * test pings, unknown payments): they are acknowledged with 200 and ignored.
      *
-     * @throws InvalidWebhookException
+     * @throws InvalidWebhookException signature missing/invalid (401)
+     * @throws PaymentProviderUnavailableException provider API down (503: the provider retries)
      */
-    public function parseWebhook(Request $request): ProviderEvent;
+    public function parseWebhook(Request $request): ?ProviderEvent;
 }

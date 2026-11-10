@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Auth\IdentityTokenVerifier;
+use App\Payments\Gateways\MercadoPagoGateway;
 use App\Payments\Gateways\SimulatorGateway;
+use Illuminate\Http\Client\Factory as HttpClient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
@@ -19,6 +21,11 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(SimulatorGateway::class, fn () => new SimulatorGateway(
             webhookSecret: config('commerce.payments.simulator.webhook_secret'),
+        ));
+
+        $this->app->bind(MercadoPagoGateway::class, fn ($app) => new MercadoPagoGateway(
+            http: $app->make(HttpClient::class),
+            config: (array) config('commerce.payments.mercadopago'),
         ));
     }
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\HealthController;
 use App\Http\Controllers\Api\V1\InternalCreditController;
+use App\Http\Controllers\Api\V1\MercadoPagoWebhookController;
 use App\Http\Controllers\Api\V1\WalletController;
 use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\PackageController;
@@ -28,6 +29,7 @@ Route::prefix('v1')->group(function () {
 
     // Payment provider webhooks: authenticated by each provider's signature.
     Route::post('/webhooks/simulator', [SimulatorController::class, 'webhook']);
+    Route::post('/webhooks/mercadopago', MercadoPagoWebhookController::class);
 
     // Service-to-service (Evidence). Never exposed to the front-end.
     Route::middleware('service')->prefix('internal')->group(function () {

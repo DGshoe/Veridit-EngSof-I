@@ -16,7 +16,10 @@ enum PaymentMethod: string
     {
         return match ($this) {
             self::Simulator => (bool) config('commerce.payments.simulator.enabled'),
-            self::MercadoPago, self::Pix => false,
+            self::MercadoPago => filled(config('commerce.payments.mercadopago.access_token'))
+                && filled(config('commerce.payments.mercadopago.webhook_secret'))
+                && filled(config('commerce.payments.mercadopago.notification_url')),
+            self::Pix => false,
         };
     }
 

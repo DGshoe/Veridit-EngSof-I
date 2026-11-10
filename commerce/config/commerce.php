@@ -39,6 +39,20 @@ return [
             'enabled' => (bool) env('PAYMENTS_SIMULATOR_ENABLED', false),
             'webhook_secret' => env('PAYMENTS_SIMULATOR_WEBHOOK_SECRET'),
         ],
+
+        // ADR-006 — Mercado Pago Checkout Pro (card, balance and PIX on MP's page).
+        // Available only when access token, webhook secret and public notification URL are set.
+        'mercadopago' => [
+            'access_token' => env('MERCADOPAGO_ACCESS_TOKEN'),
+            'public_key' => env('MERCADOPAGO_PUBLIC_KEY'),
+            'webhook_secret' => env('MERCADOPAGO_WEBHOOK_SECRET'),
+            // PUBLIC https URL that reaches this API (ngrok / Cloudflare Tunnel in local tests)
+            'notification_url' => env('MERCADOPAGO_NOTIFICATION_URL'),
+            // Front-end page the buyer returns to after paying (optional)
+            'back_url' => env('MERCADOPAGO_BACK_URL'),
+            'api_url' => env('MERCADOPAGO_API_URL', 'https://api.mercadopago.com'),
+            'timeout' => (int) env('MERCADOPAGO_TIMEOUT', 10),
+        ],
     ],
 
 ];
