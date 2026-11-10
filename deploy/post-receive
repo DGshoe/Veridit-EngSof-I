@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 #
-# Veridit Identity — deploy automático da PRODUÇÃO LOCAL (CLAUDE.md §11)
+# Veridit — deploy automático da PRODUÇÃO LOCAL: Identity (:8080) e Commerce (:8081) (CLAUDE.md §11)
 #
 # Instalado por deploy/setup-production.sh em <PROD_ROOT>/producao.git/hooks/post-receive.
 # Disparado por:  git push production main
 #
-#   1. roda os testes numa cópia TEMPORÁRIA do commit (a produção não é tocada);
-#      se falharem, o deploy é cancelado e a produção segue na versão anterior
+#   1. roda os testes do Identity E do Commerce numa cópia TEMPORÁRIA do commit
+#      (a produção não é tocada); se algum falhar, o deploy é cancelado e a
+#      produção segue na versão anterior
 #   2. atualiza o código em producao-app/ (o .env.production, fora do Git, é preservado)
 #   3. build das imagens, 4. sobe os containers, 5. migrations/seed/Swagger/cache,
 #   6. confere o /health
@@ -14,7 +15,7 @@ set -euo pipefail
 
 DEPLOY_DIR="__DEPLOY_DIR__"        # substituído pelo setup-production.sh
 BRANCH="main"
-HEALTH_URL="http://localhost:8080/api/v1/health"
+HEALTH_URLS=("http://localhost:8080/api/v1/health" "http://localhost:8081/api/v1/health")
 COMPOSE=(docker compose -p veridit_prod -f docker-compose.prod.yml --env-file .env.production)
 
 REPO_DIR="$(cd "${GIT_DIR:-.}" && pwd)"   # repositório bare (absoluto: mudamos de pasta abaixo)
@@ -32,6 +33,8 @@ deploy() {
 
   [ -f "$DEPLOY_DIR/.env.production" ] \
     || fail "Falta $DEPLOY_DIR/.env.production (rode deploy/setup-production.sh). Deploy cancelado."
+  [ -f "$DEPLOY_DIR/commerce/.env.production" ] \
+    || fail "Falta $DEPLOY_DIR/commerce/.env.production (rode deploy/setup-production.sh). Deploy cancelado."
 
   # ---------------------------------------------------------------- 1. testes
   log "[1/6] Rodando os testes do commit $short (cópia temporária)"
@@ -43,7 +46,15 @@ deploy() {
   ) || fail "Build da imagem de testes falhou. Deploy cancelado; produção continua na versão anterior."
 
   docker run --rm veridit-identity:test php artisan test \
-    || fail "Testes falharam. Deploy cancelado; produção continua na versão anterior."
+    || fail "Testes do Identity falharam. Deploy cancelado; produção continua na versão anterior."
+
+  (
+    cd "$BUILD_DIR/commerce"
+    docker build -q -f docker/php/Dockerfile --target test -t veridit-commerce:test . >/dev/null
+  ) || fail "Build da imagem de testes do Commerce falhou. Deploy cancelado; produção continua na versão anterior."
+
+  docker run --rm veridit-commerce:test php artisan test \
+    || fail "Testes do Commerce falharam. Deploy cancelado; produção continua na versão anterior."
 
   # ---------------------------------------------------------------- 2. código
   log "[2/6] Atualizando o código em $DEPLOY_DIR"
@@ -70,16 +81,24 @@ deploy() {
   "${COMPOSE[@]}" exec -T app php artisan optimize
   "${COMPOSE[@]}" restart queue >/dev/null   # worker recarrega código e cache novos
 
+  # Commerce: migrations + catálogo D2 (PackageSeeder é idempotente: roda a cada deploy)
+  "${COMPOSE[@]}" exec -T commerce-app php artisan migrate --force
+  "${COMPOSE[@]}" exec -T commerce-app php artisan db:seed --class=PackageSeeder --force
+  "${COMPOSE[@]}" exec -T commerce-app php artisan optimize
+  "${COMPOSE[@]}" restart commerce-queue >/dev/null
+
   # ---------------------------------------------------------------- 6. health
-  log "[6/6] Verificando a saúde em $HEALTH_URL"
-  for _ in $(seq 1 10); do
-    if curl -fsS "$HEALTH_URL"; then
-      printf '\n\n>> Deploy OK: %s publicado em http://localhost:8080\n' "$short"
-      return 0
-    fi
-    sleep 3
+  log "[6/6] Verificando a saúde: ${HEALTH_URLS[*]}"
+  local url ok
+  for url in "${HEALTH_URLS[@]}"; do
+    ok=""
+    for _ in $(seq 1 10); do
+      if curl -fsS "$url"; then ok=1; echo; break; fi
+      sleep 3
+    done
+    [ -n "$ok" ] || fail "$url não respondeu 200. Veja: docker compose -p veridit_prod -f docker-compose.prod.yml logs app commerce-app"
   done
-  fail "/health não respondeu 200. Veja: docker compose -p veridit_prod -f docker-compose.prod.yml logs app"
+  printf '\n>> Deploy OK: %s publicado (Identity http://localhost:8080 · Commerce http://localhost:8081)\n' "$short"
 }
 
 while read -r oldrev newrev ref; do

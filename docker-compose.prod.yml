@@ -1,4 +1,4 @@
-# Veridit Identity Service — PRODUÇÃO LOCAL
+# Veridit — PRODUÇÃO LOCAL (Identity :8080 e Commerce :8081)
 #   docker compose -p veridit_prod -f docker-compose.prod.yml --env-file .env.production up -d
 # Normalmente executado pelo hook de deploy (deploy/post-receive).
 # Containers, rede e volumes separados do ambiente de dev (projeto veridit_prod).
@@ -23,6 +23,15 @@ x-app: &app
     target: production
   image: veridit-identity:prod
   env_file: .env.production
+  restart: unless-stopped
+
+x-commerce: &commerce
+  build:
+    context: ./commerce
+    dockerfile: docker/php/Dockerfile
+    target: production
+  image: veridit-commerce:prod
+  env_file: ./commerce/.env.production
   restart: unless-stopped
 
 services:
@@ -52,6 +61,34 @@ services:
       - "127.0.0.1:8080:80"
     depends_on:
       - app
+
+  # ---------------- Commerce Service (commerce/) ----------------
+  commerce-app:
+    <<: *commerce
+    depends_on:
+      commerce-db:
+        condition: service_healthy
+      web:
+        condition: service_started
+
+  # Worker da fila do Commerce
+  commerce-queue:
+    <<: *commerce
+    command: ["php", "artisan", "queue:work", "--tries=3", "--sleep=1", "--max-time=3600"]
+    depends_on:
+      commerce-app:
+        condition: service_started
+
+  commerce-web:
+    build:
+      context: ./commerce
+      dockerfile: docker/nginx/Dockerfile
+    image: veridit-commerce-web:prod
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8081:80"
+    depends_on:
+      - commerce-app
 
   identity-db:
     <<: *postgres

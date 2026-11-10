@@ -64,14 +64,14 @@ services:
   # ---------------- Commerce Service (commerce/) ----------------
   commerce-app:
     build:
-      context: .
+      context: ./commerce
       dockerfile: docker/php/Dockerfile
       target: base
     image: veridit-commerce:dev
-    command: ["php-fpm", "-R"]   # dev only, see docker/php/fpm-dev.conf
+    command: ["php-fpm", "-R"]   # dev only, see commerce/docker/php/fpm-dev.conf
     volumes:
       - ./commerce:/var/www/html
-      - ./docker/php/fpm-dev.conf:/usr/local/etc/php-fpm.d/zz-dev.conf:ro
+      - ./commerce/docker/php/fpm-dev.conf:/usr/local/etc/php-fpm.d/zz-dev.conf:ro
     depends_on:
       commerce-db:
         condition: service_healthy

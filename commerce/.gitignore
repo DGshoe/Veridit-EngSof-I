@@ -28,3 +28,6 @@ Thumbs.db
 
 # Swagger: generated at runtime (dev) or at build/deploy (prod)
 /storage/api-docs
+
+# Provider certificates (PIX mTLS) never go to Git
+/storage/certs

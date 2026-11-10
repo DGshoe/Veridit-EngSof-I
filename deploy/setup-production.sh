@@ -7,7 +7,7 @@
 #
 # Cria:
 #   PROD_ROOT/producao.git      repositório bare + hook post-receive
-#   PROD_ROOT/producao-app/     pasta da produção, com .env.production (segredos aleatórios)
+#   PROD_ROOT/producao-app/     pasta da produção, com .env.production e commerce/.env.production (segredos aleatórios)
 #   remote "production"         neste repositório
 #
 # Idempotente: pode rodar de novo (reinstala o hook; NÃO sobrescreve o .env.production).
@@ -99,6 +99,32 @@ else
   echo "   criado com segredos aleatórios (chaves do JWT e APP_KEY diferentes do dev)"
 fi
 
+COMMERCE_ENV="$DEPLOY_DIR/commerce/.env.production"
+echo "   Commerce: $COMMERCE_ENV"
+mkdir -p "$DEPLOY_DIR/commerce"
+if [ -f "$COMMERCE_ENV" ]; then
+  echo "   commerce/.env.production já existe: mantido"
+else
+  env_value() { grep -E "^$1=" "$ENV_FILE" | head -1 | cut -d= -f2-; }
+  commerce_db_password="$(env_value COMMERCE_DB_PASSWORD)"
+  identity_public_key="$(env_value JWT_PUBLIC_KEY)"
+  [ -n "$commerce_db_password" ] && [ -n "$identity_public_key" ] \
+    || { echo "!! COMMERCE_DB_PASSWORD ou JWT_PUBLIC_KEY ausente em $ENV_FILE" >&2; exit 1; }
+
+  # Only Identity's PUBLIC key is copied: Commerce can verify tokens, never issue them (ADR-001).
+  sed -e "s|^APP_KEY=.*|APP_KEY=$(app_key)|" \
+      -e "s|^DB_PASSWORD=.*|DB_PASSWORD=$commerce_db_password|" \
+      -e "s|^IDENTITY_JWT_PUBLIC_KEY=.*|IDENTITY_JWT_PUBLIC_KEY=$identity_public_key|" \
+      -e "s|^COMMERCE_SERVICE_TOKEN=.*|COMMERCE_SERVICE_TOKEN=$(hex 32)|" \
+      -e "s|^PAYMENTS_SIMULATOR_WEBHOOK_SECRET=.*|PAYMENTS_SIMULATOR_WEBHOOK_SECRET=$(hex 32)|" \
+      commerce/.env.production.example > "$COMMERCE_ENV"
+  chmod 600 "$COMMERCE_ENV" 2>/dev/null || true
+  if grep -qE '^[^#]*=(gerar|copiar)-' "$COMMERCE_ENV"; then
+    echo "!! Sobrou valor 'gerar-*'/'copiar-*' em $COMMERCE_ENV" >&2; exit 1
+  fi
+  echo "   commerce/.env.production criado (segredos aleatórios; só a chave PÚBLICA do Identity)"
+fi
+
 echo ">> [4/4] Remote 'production' neste repositório"
 if git remote get-url production >/dev/null 2>&1; then
   git remote set-url production "$BARE_REPO"
@@ -113,7 +139,8 @@ Pronto. Para publicar:
     git push production main
 
 Depois do primeiro deploy:
-    API       http://localhost:8080/api/v1/health
+    Identity  http://localhost:8080/api/v1/health
+    Commerce  http://localhost:8081/api/v1/health
     Swagger   http://localhost:8080/api/documentation
     Mailpit   http://localhost:8026
     Admin     e-mail e senha em ADMIN_EMAIL / ADMIN_PASSWORD de $ENV_FILE
