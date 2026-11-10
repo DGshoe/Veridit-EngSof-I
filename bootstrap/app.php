@@ -3,6 +3,7 @@
 use App\Exceptions\Auth\AccountBlockedException;
 use App\Exceptions\Auth\InvalidCredentialsException;
 use App\Exceptions\Auth\InvalidTokenException;
+use App\Http\Middleware\EnsureTokenMatchesPassword;
 use App\Http\Middleware\EnsureUserType;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
@@ -22,6 +23,12 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'type' => EnsureUserType::class,
+        ]);
+
+        // Authenticated API routes: valid JWT issued with the current password.
+        $middleware->group('jwt', [
+            'auth:api',
+            EnsureTokenMatchesPassword::class,
         ]);
 
         // API only: never redirect unauthenticated requests to a login page.

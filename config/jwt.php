@@ -169,6 +169,7 @@ return [
 
     'persistent_claims' => [
         'type',   // user profile (see User::getJWTCustomClaims)
+        'pwv',    // password version: keeps refreshed tokens tied to the password
     ],
 
     /*

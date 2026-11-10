@@ -10,6 +10,10 @@
 
 return [
 
+    // Front-end base URL, used in the password reset link (REQ02):
+    // {FRONTEND_URL}/redefinir-senha?token=...&email=...
+    'frontend_url' => env('FRONTEND_URL', 'http://localhost:3000'),
+
     // Initial administrator, created by AdminSeeder. Never hard-code credentials.
     'admin' => [
         'name' => env('ADMIN_NAME', 'Administrador'),

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\UserStatus;
 use App\Enums\UserType;
+use App\Notifications\ResetPasswordNotification;
 use App\Support\Cpf;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
@@ -45,6 +46,7 @@ class User extends Authenticatable implements JWTSubject
             'type' => UserType::class,
             'status' => UserStatus::class,
             'last_login_at' => 'datetime',
+            'password_changed_at' => 'datetime',
         ];
     }
 
@@ -100,6 +102,23 @@ class User extends Authenticatable implements JWTSubject
     {
         return [
             'type' => $this->type->value,
+            'pwv' => $this->passwordVersion(),
         ];
+    }
+
+    /**
+     * Opaque fingerprint of the current password hash. It changes whenever the
+     * password changes, so tokens issued before a reset stop matching (REQ02).
+     * HMAC with the app key: reveals nothing about the hash itself.
+     */
+    public function passwordVersion(): string
+    {
+        return substr(hash_hmac('sha256', (string) $this->getAuthPassword(), (string) config('app.key')), 0, 16);
+    }
+
+    /** Sends the REQ02 e-mail with the front-end link. */
+    public function sendPasswordResetNotification(#[\SensitiveParameter] $token): void
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 }

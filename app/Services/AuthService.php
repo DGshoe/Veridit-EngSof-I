@@ -87,15 +87,20 @@ class AuthService
             // Validates signature, blacklist and the refresh window (not "exp"),
             // then blacklists the old token.
             $token = $guard->refresh();
-            $user = User::query()->find($guard->setToken($token)->getPayload()->get('sub'));
+            $payload = $guard->setToken($token)->getPayload();
+            $user = User::query()->find($payload->get('sub'));
         } catch (JWTException) {
             throw new InvalidTokenException;
         }
 
-        if (! $user || $user->isBlocked()) {
-            $guard->invalidate(); // do not leave the freshly issued token usable
+        // Token from before a password reset (REQ02), deleted or blocked user:
+        // do not leave the freshly issued token usable.
+        $staleToken = $user && ! hash_equals($user->passwordVersion(), (string) $payload->get('pwv'));
 
-            throw $user ? new AccountBlockedException : new InvalidTokenException;
+        if (! $user || $staleToken || $user->isBlocked()) {
+            $guard->invalidate();
+
+            throw ($user && ! $staleToken) ? new AccountBlockedException : new InvalidTokenException;
         }
 
         return new IssuedToken($token, $user, $this->ttlSeconds());
