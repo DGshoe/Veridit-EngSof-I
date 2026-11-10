@@ -10,8 +10,23 @@ use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
+use OpenApi\Attributes as OA;
 
 /** REQ01 — public registration of "advogado" or "comum". */
+#[OA\Schema(
+    schema: 'RegisterRequest',
+    required: ['name', 'email', 'password', 'password_confirmation', 'cpf', 'type'],
+    properties: [
+        new OA\Property(property: 'name', type: 'string', maxLength: 150, example: 'Maria Souza'),
+        new OA\Property(property: 'email', type: 'string', format: 'email', maxLength: 150, example: 'maria@exemplo.com'),
+        new OA\Property(property: 'password', type: 'string', format: 'password', minLength: 8, description: 'Mínimo 8 caracteres, com letras e números', example: 'Senha1234'),
+        new OA\Property(property: 'password_confirmation', type: 'string', format: 'password', example: 'Senha1234'),
+        new OA\Property(property: 'cpf', type: 'string', description: 'Com ou sem máscara; dígitos verificadores validados', example: '529.982.247-25'),
+        new OA\Property(property: 'type', type: 'string', enum: ['advogado', 'comum'], description: '"empresa" ainda não disponível (422)', example: 'advogado'),
+        new OA\Property(property: 'oab_number', type: 'string', pattern: '^\d{1,8}$', nullable: true, description: 'Obrigatório para advogado; ignorado para comum', example: '123456'),
+        new OA\Property(property: 'oab_uf', type: 'string', minLength: 2, maxLength: 2, nullable: true, description: 'UF brasileira. Obrigatório para advogado; ignorado para comum', example: 'BA'),
+    ],
+)]
 class RegisterRequest extends FormRequest
 {
     public function authorize(): bool
