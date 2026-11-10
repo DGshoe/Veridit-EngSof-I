@@ -7,6 +7,8 @@ use App\Http\Middleware\EnsureTokenMatchesPassword;
 use App\Http\Middleware\EnsureUserIsActive;
 use App\Http\Middleware\EnsureUserType;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -44,6 +46,20 @@ return Application::configure(basePath: dirname(__DIR__))
             AccountBlockedException::class,
             InvalidTokenException::class,
         ]);
+
+        // Database errors: the default message embeds the SQL *bindings*
+        // (full CPF, e-mail, password hash). Log a sanitized version instead.
+        $exceptions->report(function (QueryException $e) {
+            Log::error('Erro de banco de dados.', [
+                'exception' => $e::class,
+                'sqlstate' => $e->getCode(),
+                'connection' => $e->connectionName,
+                'sql' => $e->getSql(),               // placeholders only ("?"), never the values
+                'at' => $e->getFile().':'.$e->getLine(),
+            ]);
+
+            return false; // stop: do not log the original message
+        });
 
         // Never write these request fields to logs/flash data (§6 privacy).
         $exceptions->dontFlash(['password', 'password_confirmation', 'current_password', 'token', 'cpf']);
