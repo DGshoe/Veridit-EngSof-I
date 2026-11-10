@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+#
+# Veridit Identity — deploy automático da PRODUÇÃO LOCAL (CLAUDE.md §11)
+#
+# Instalado por deploy/setup-production.sh em <PROD_ROOT>/producao.git/hooks/post-receive.
+# Disparado por:  git push production main
+#
+#   1. roda os testes numa cópia TEMPORÁRIA do commit (a produção não é tocada);
+#      se falharem, o deploy é cancelado e a produção segue na versão anterior
+#   2. atualiza o código em producao-app/ (o .env.production, fora do Git, é preservado)
+#   3. build das imagens, 4. sobe os containers, 5. migrations/seed/Swagger/cache,
+#   6. confere o /health
+set -euo pipefail
+
+DEPLOY_DIR="__DEPLOY_DIR__"        # substituído pelo setup-production.sh
+BRANCH="main"
+HEALTH_URL="http://localhost:8080/api/v1/health"
+COMPOSE=(docker compose -p veridit_prod -f docker-compose.prod.yml --env-file .env.production)
+
+REPO_DIR="$(cd "${GIT_DIR:-.}" && pwd)"   # repositório bare (absoluto: mudamos de pasta abaixo)
+unset GIT_DIR
+
+BUILD_DIR=""
+trap 'if [ -n "$BUILD_DIR" ]; then rm -rf "$BUILD_DIR"; fi' EXIT   # also on failure
+
+log()  { printf '\n>> %s\n' "$*"; }
+fail() { printf '\n!! %s\n' "$*" >&2; exit 1; }
+
+deploy() {
+  local newrev="$1"
+  local short="${newrev:0:7}"
+
+  [ -f "$DEPLOY_DIR/.env.production" ] \
+    || fail "Falta $DEPLOY_DIR/.env.production (rode deploy/setup-production.sh). Deploy cancelado."
+
+  # ---------------------------------------------------------------- 1. testes
+  log "[1/6] Rodando os testes do commit $short (cópia temporária)"
+  BUILD_DIR="$(mktemp -d)"
+  git --git-dir="$REPO_DIR" archive "$newrev" | tar -x -C "$BUILD_DIR"
+  (
+    cd "$BUILD_DIR"
+    docker build -q -f docker/php/Dockerfile --target test -t veridit-identity:test . >/dev/null
+  ) || fail "Build da imagem de testes falhou. Deploy cancelado; produção continua na versão anterior."
+
+  docker run --rm veridit-identity:test php artisan test \
+    || fail "Testes falharam. Deploy cancelado; produção continua na versão anterior."
+
+  # ---------------------------------------------------------------- 2. código
+  log "[2/6] Atualizando o código em $DEPLOY_DIR"
+  mkdir -p "$DEPLOY_DIR"
+  git --git-dir="$REPO_DIR" --work-tree="$DEPLOY_DIR" checkout -f "$BRANCH"
+  cd "$DEPLOY_DIR"
+
+  # ---------------------------------------------------------------- 3. build
+  log "[3/6] Build das imagens de produção"
+  "${COMPOSE[@]}" build
+
+  # ---------------------------------------------------------------- 4. up
+  log "[4/6] Subindo os containers"
+  "${COMPOSE[@]}" up -d --remove-orphans
+
+  # ---------------------------------------------------------------- 5. app
+  log "[5/6] Migrations, seed (1º deploy), Swagger e cache"
+  "${COMPOSE[@]}" exec -T app php artisan migrate --force
+  if [ ! -f "$DEPLOY_DIR/.admin-seeded" ]; then
+    "${COMPOSE[@]}" exec -T app php artisan db:seed --class=AdminSeeder --force
+    date -u +%Y-%m-%dT%H:%M:%SZ > "$DEPLOY_DIR/.admin-seeded"
+  fi
+  "${COMPOSE[@]}" exec -T app php artisan l5-swagger:generate
+  "${COMPOSE[@]}" exec -T app php artisan optimize
+  "${COMPOSE[@]}" restart queue >/dev/null   # worker recarrega código e cache novos
+
+  # ---------------------------------------------------------------- 6. health
+  log "[6/6] Verificando a saúde em $HEALTH_URL"
+  for _ in $(seq 1 10); do
+    if curl -fsS "$HEALTH_URL"; then
+      printf '\n\n>> Deploy OK: %s publicado em http://localhost:8080\n' "$short"
+      return 0
+    fi
+    sleep 3
+  done
+  fail "/health não respondeu 200. Veja: docker compose -p veridit_prod -f docker-compose.prod.yml logs app"
+}
+
+while read -r oldrev newrev ref; do
+  if [ "$ref" != "refs/heads/$BRANCH" ]; then
+    echo "Ignorando $ref (só $BRANCH é publicado)"
+    continue
+  fi
+  if [ "$newrev" = "0000000000000000000000000000000000000000" ]; then
+    echo "Branch $BRANCH removido: nada a publicar"
+    continue
+  fi
+  deploy "$newrev"
+done
