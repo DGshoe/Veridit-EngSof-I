@@ -103,7 +103,7 @@ use OpenApi\Attributes as OA;
 )]
 #[OA\Response(
     response: 'Forbidden',
-    description: 'Perfil sem permissão para o recurso.',
+    description: 'Perfil sem permissão para o recurso, ou usuário bloqueado ("Usuário bloqueado. Entre em contato com o suporte.").',
     content: new OA\JsonContent(ref: '#/components/schemas/Error', example: ['message' => 'Acesso negado.']),
 )]
 #[OA\Response(

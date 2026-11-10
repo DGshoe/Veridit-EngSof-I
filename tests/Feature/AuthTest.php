@@ -166,6 +166,18 @@ class AuthTest extends TestCase
             ->assertForbidden();
     }
 
+    public function test_blocking_takes_effect_immediately_on_existing_tokens(): void
+    {
+        $user = User::factory()->create();
+        $token = $this->loginAs($user);
+        $this->getJson('/api/v1/me', $this->bearer($token))->assertOk();
+
+        $user->forceFill(['status' => 'bloqueado'])->save();
+
+        $this->getJson('/api/v1/me', $this->bearer($token))->assertForbidden();
+        $this->postJson('/api/v1/auth/refresh', [], $this->bearer($token))->assertForbidden();
+    }
+
     public function test_sixth_login_attempt_in_a_minute_is_throttled(): void
     {
         $user = User::factory()->create();
