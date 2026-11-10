@@ -3,16 +3,23 @@
 namespace App\Services;
 
 use App\Auth\IdentityUser;
+use App\Enums\OrderStatus;
 use App\Enums\PaymentMethod;
 use App\Exceptions\IdempotencyConflictException;
+use App\Exceptions\PaymentProviderUnavailableException;
 use App\Models\Order;
 use App\Models\Package;
+use App\Payments\PaymentGatewayRegistry;
 use Illuminate\Database\UniqueConstraintViolationException;
+use Throwable;
 
 /** Packages module: purchase of a package (REQ05). */
 class OrderService
 {
-    public function __construct(private readonly IdentityClient $identity) {}
+    public function __construct(
+        private readonly IdentityClient $identity,
+        private readonly PaymentGatewayRegistry $gateways,
+    ) {}
 
     /**
      * Creates a pending order. Credits are granted only when the payment
@@ -52,7 +59,26 @@ class OrderService
             throw $e;
         }
 
+        $this->openCharge($order);
+
         return [$order, true];
+    }
+
+    /** Opens the charge at the provider (outside any DB transaction: it is an external call). */
+    private function openCharge(Order $order): void
+    {
+        try {
+            $charge = $this->gateways->for($order->payment_method)->createCharge($order);
+        } catch (Throwable $e) {
+            $order->update(['status' => OrderStatus::Failed, 'failed_at' => now()]);
+
+            throw new PaymentProviderUnavailableException($order->payment_method->value, $e::class);
+        }
+
+        $order->update([
+            'provider_payment_id' => $charge->providerPaymentId,
+            'payment_data' => $charge->data,
+        ]);
     }
 
     private function findReplay(IdentityUser $user, string $key, Package $package, PaymentMethod $method): ?Order
