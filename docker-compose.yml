@@ -61,6 +61,44 @@ services:
     depends_on:
       - app
 
+  # ---------------- Commerce Service (commerce/) ----------------
+  commerce-app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      target: base
+    image: veridit-commerce:dev
+    command: ["php-fpm", "-R"]   # dev only, see docker/php/fpm-dev.conf
+    volumes:
+      - ./commerce:/var/www/html
+      - ./docker/php/fpm-dev.conf:/usr/local/etc/php-fpm.d/zz-dev.conf:ro
+    depends_on:
+      commerce-db:
+        condition: service_healthy
+
+  # Worker da fila do Commerce
+  commerce-queue:
+    image: veridit-commerce:dev
+    command: ["php", "artisan", "queue:work", "--tries=3", "--sleep=1"]
+    restart: unless-stopped
+    volumes:
+      - ./commerce:/var/www/html
+    depends_on:
+      commerce-app:
+        condition: service_started
+      commerce-db:
+        condition: service_healthy
+
+  commerce-web:
+    image: nginx:1.30-alpine
+    ports:
+      - "127.0.0.1:8001:80"
+    volumes:
+      - ./commerce:/var/www/html:ro
+      - ./commerce/docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - commerce-app
+
   identity-db:
     <<: *postgres
     environment:

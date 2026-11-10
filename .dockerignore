@@ -21,3 +21,7 @@ bootstrap/cache/*.php
 .vscode
 .idea
 .claude
+
+# Other services: never part of the Identity image
+commerce
+Veridit-Front

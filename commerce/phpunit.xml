@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+>
+    <testsuites>
+        <testsuite name="Unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Feature">
+            <directory>tests/Feature</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory>app</directory>
+        </include>
+    </source>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <!-- Test-only key (not used anywhere else) so the suite runs without a .env -->
+        <env name="APP_KEY" value="base64:Wm9jT2t0Y29tbWVyY2UtdGVzdGluZy1rZXktMzJieXQ="/>
+        <env name="APP_LOCALE" value="pt_BR"/>
+        <!-- Identity public key: an RSA pair is generated in memory by tests/TestCase.php -->
+        <env name="COMMERCE_SERVICE_TOKEN" value="testing-only-service-token" force="true"/>
+        <env name="PAYMENTS_SIMULATOR_ENABLED" value="true" force="true"/>
+        <env name="PAYMENTS_SIMULATOR_WEBHOOK_SECRET" value="testing-only-simulator-secret" force="true"/>
+        <env name="IDENTITY_URL" value="http://identity.test" force="true"/>
+        <env name="APP_MAINTENANCE_DRIVER" value="file"/>
+        <env name="BCRYPT_ROUNDS" value="4"/>
+        <env name="BROADCAST_CONNECTION" value="null"/>
+        <env name="CACHE_STORE" value="array"/>
+        <env name="DB_CONNECTION" value="commerce" force="true"/>
+        <env name="DB_DRIVER" value="sqlite" force="true"/>
+        <env name="DB_DATABASE" value=":memory:" force="true"/>
+        <env name="DB_URL" value=""/>
+        <env name="MAIL_MAILER" value="array"/>
+        <env name="QUEUE_CONNECTION" value="sync"/>
+        <env name="SESSION_DRIVER" value="array"/>
+        <env name="PULSE_ENABLED" value="false"/>
+        <env name="TELESCOPE_ENABLED" value="false"/>
+        <env name="NIGHTWATCH_ENABLED" value="false"/>
+    </php>
+</phpunit>
