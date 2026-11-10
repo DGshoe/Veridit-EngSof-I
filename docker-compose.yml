@@ -36,6 +36,10 @@ services:
 
   # Worker da fila (e-mails de recuperação de senha — REQ02)
   queue:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      target: base
     image: veridit-identity:dev
     command: ["php", "artisan", "queue:work", "--tries=3", "--sleep=1"]
     restart: unless-stopped
