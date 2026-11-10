@@ -2,31 +2,88 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\UserStatus;
+use App\Enums\UserType;
+use App\Support\Cpf;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password'])]
-#[Hidden(['password', 'remember_token'])]
+/**
+ * @property string $id
+ * @property string $name
+ * @property string $email
+ * @property string $cpf
+ * @property UserType $type
+ * @property string|null $oab_number
+ * @property string|null $oab_uf
+ * @property UserStatus $status
+ * @property \Illuminate\Support\Carbon|null $last_login_at
+ */
+#[Fillable(['name', 'email', 'password', 'cpf', 'type', 'oab_number', 'oab_uf'])]
+#[Hidden(['password'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, HasUuids, Notifiable;
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
+    /** @var array<string, mixed> */
+    protected $attributes = [
+        'status' => 'ativo',
+    ];
+
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'type' => UserType::class,
+            'status' => UserStatus::class,
+            'last_login_at' => 'datetime',
         ];
+    }
+
+    /** E-mail is always stored trimmed and lowercase. */
+    protected function email(): Attribute
+    {
+        return Attribute::make(
+            set: fn (?string $value) => $value === null ? null : mb_strtolower(trim($value)),
+        );
+    }
+
+    /** CPF is always stored as digits only. */
+    protected function cpf(): Attribute
+    {
+        return Attribute::make(
+            set: fn (?string $value) => $value === null ? null : Cpf::normalize($value),
+        );
+    }
+
+    /** OAB UF is always stored uppercase. */
+    protected function oabUf(): Attribute
+    {
+        return Attribute::make(
+            set: fn (?string $value) => $value === null ? null : mb_strtoupper(trim($value)),
+        );
+    }
+
+    /** "123456/BA", or null when the user has no OAB registration. */
+    public function oab(): ?string
+    {
+        return $this->oab_number && $this->oab_uf ? "{$this->oab_number}/{$this->oab_uf}" : null;
+    }
+
+    public function isAdmin(): bool
+    {
+        return $this->type === UserType::Admin;
+    }
+
+    public function isBlocked(): bool
+    {
+        return $this->status === UserStatus::Bloqueado;
     }
 }

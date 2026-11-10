@@ -2,44 +2,63 @@
 
 namespace Database\Factories;
 
+use App\Enums\UserStatus;
+use App\Enums\UserType;
 use App\Models\User;
+use App\Support\Cpf;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 /**
  * @extends Factory<User>
  */
 class UserFactory extends Factory
 {
-    /**
-     * The current password being used by the factory.
-     */
-    protected static ?string $password;
+    /** Default plain-text password for factory users (tests only). */
+    public const PASSWORD = 'Senha1234';
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected static ?string $passwordHash;
+
     public function definition(): array
     {
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
+            'password' => static::$passwordHash ??= Hash::make(self::PASSWORD),
+            'cpf' => self::validCpf(),
+            'type' => UserType::Comum,
+            'oab_number' => null,
+            'oab_uf' => null,
+            'status' => UserStatus::Ativo,
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static
+    public function advogado(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
+        return $this->state(fn () => [
+            'type' => UserType::Advogado,
+            'oab_number' => (string) fake()->unique()->numberBetween(1000, 99999999),
+            'oab_uf' => fake()->randomElement(['BA', 'SP', 'RJ', 'MG', 'PE']),
         ]);
+    }
+
+    public function admin(): static
+    {
+        return $this->state(fn () => ['type' => UserType::Admin]);
+    }
+
+    public function bloqueado(): static
+    {
+        return $this->state(fn () => ['status' => UserStatus::Bloqueado]);
+    }
+
+    /** Random CPF with valid check digits (digits only). */
+    public static function validCpf(): string
+    {
+        do {
+            $base = (string) fake()->unique()->numerify('#########');
+        } while (preg_match('/^(\d)\1{8}$/', $base));
+
+        return $base.Cpf::checkDigits($base);
     }
 }
