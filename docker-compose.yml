@@ -24,8 +24,10 @@ services:
       dockerfile: docker/php/Dockerfile
       target: base
     image: veridit-identity:dev
+    command: ["php-fpm", "-R"]   # -R: allow workers as root (dev only, see fpm-dev.conf)
     volumes:
       - ./:/var/www/html
+      - ./docker/php/fpm-dev.conf:/usr/local/etc/php-fpm.d/zz-dev.conf:ro
     depends_on:
       identity-db:
         condition: service_healthy

@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 /**
  * @property string $id
@@ -27,7 +28,7 @@ use Illuminate\Notifications\Notifiable;
  */
 #[Fillable(['name', 'email', 'password', 'cpf', 'type', 'oab_number', 'oab_uf'])]
 #[Hidden(['password'])]
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, HasUuids, Notifiable;
@@ -85,5 +86,20 @@ class User extends Authenticatable
     public function isBlocked(): bool
     {
         return $this->status === UserStatus::Bloqueado;
+    }
+
+    // ---- JWTSubject ------------------------------------------------------
+
+    public function getJWTIdentifier(): mixed
+    {
+        return $this->getKey();
+    }
+
+    /** Extra claims; no personal data (CPF/OAB) ever goes into the token. */
+    public function getJWTCustomClaims(): array
+    {
+        return [
+            'type' => $this->type->value,
+        ];
     }
 }
