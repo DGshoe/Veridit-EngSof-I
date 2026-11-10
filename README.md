@@ -71,7 +71,7 @@ docker compose exec app composer install
 
 # 4. Chaves da aplicação e do JWT (gravadas no .env)
 docker compose exec app php artisan key:generate
-docker compose exec app php artisan jwt:secret
+docker compose exec app php artisan jwt:keys      # par RSA do JWT (RS256)
 
 # 5. Tabelas + usuário admin (a partir de ADMIN_* do .env)
 docker compose exec app php artisan migrate --seed
@@ -136,7 +136,7 @@ bash deploy/setup-production.sh /d/veridit
 O script:
 
 1. cria o repositório bare `producao.git` e instala o hook `post-receive`;
-2. cria `producao-app/.env.production` a partir de [.env.production.example](.env.production.example), com **segredos aleatórios** (`APP_KEY`, `JWT_SECRET` e senhas, todos diferentes do dev) e um CPF válido para o admin;
+2. cria `producao-app/.env.production` a partir de [.env.production.example](.env.production.example), com **segredos aleatórios** (`APP_KEY`, par de chaves RSA do JWT e senhas, todos diferentes do dev) e um CPF válido para o admin;
 3. adiciona o remote `production` a este repositório.
 
 O script pode ser executado de novo sem problema: ele reinstala o hook e **não** sobrescreve o `.env.production`.
@@ -279,7 +279,9 @@ Os modelos são [.env.example](.env.example) (dev) e [.env.production.example](.
 
 | Variável | Padrão | Descrição |
 |---|---|---|
-| `JWT_SECRET` | — | Gerado por `php artisan jwt:secret`. **Diferente** em dev e produção |
+| `JWT_ALGO` | `RS256` | Assinatura assimétrica (chave privada assina, pública verifica) |
+| `JWT_PRIVATE_KEY` | — | Chave privada RSA (`base64:<PEM>`), gerada por `php artisan jwt:keys`. **Só este serviço** a tem; **diferente** em dev e produção |
+| `JWT_PUBLIC_KEY` | — | Chave pública correspondente. É a única que pode ser entregue aos outros serviços (`php artisan jwt:keys --show-public`) |
 | `JWT_TTL` | `15` | Validade do access token (minutos) |
 | `JWT_REFRESH_TTL` | `10080` | Janela de refresh (minutos = 7 dias) |
 | `JWT_BLACKLIST_ENABLED` | `true` | Tokens de logout/refresh vão para a blacklist |
@@ -330,6 +332,9 @@ O seeder pode ser executado de novo sem duplicar o admin: ele atualiza o usuári
 ## 8. Segurança e decisões de projeto
 
 - **JWT (ADR-001):** access token de 15 min e refresh dentro de 7 dias após o login. Logout e refresh mandam o token antigo para a blacklist.
+- **Assinatura RS256:** o Identity assina os tokens com a chave **privada**, que só ele tem. Commerce, Evidence, Notification e Gateway recebem apenas a chave **pública** (`php artisan jwt:keys --show-public`) e com ela conseguem **verificar** um token, mas não **emitir** um. Os testes garantem que tokens assinados com outra chave, com `alg: none` ou com HS256 usando a chave pública como segredo (ataque de confusão de algoritmo) são recusados com 401.
+- **Limite da verificação local:** os outros serviços validam assinatura e expiração, mas não enxergam a blacklist nem a claim `pwv` (que dependem do banco e da `APP_KEY` do Identity). Assim, um token de quem fez logout ou trocou a senha ainda é aceito por eles até expirar, no máximo 15 minutos. Se um serviço precisar de revogação imediata, deve consultar o Identity (`GET /api/v1/me`).
+- **Trocar as chaves** (`php artisan jwt:keys --force` no dev; no `.env.production` na produção) invalida todos os tokens emitidos; os outros serviços precisam receber a nova chave pública.
 - **Troca de senha revoga todos os tokens:** cada JWT carrega a claim `pwv`, uma impressão digital HMAC da senha atual. Depois de um reset, os tokens anteriores, inclusive os ainda dentro da janela de refresh, passam a receber 401. A coluna `password_changed_at` guarda a data da troca para auditoria.
 - **Usuário bloqueado** recebe 403 no login e também **imediatamente** em qualquer rota autenticada, mesmo com um token ainda válido.
 - **RBAC:** o middleware `type:admin` controla o acesso por perfil, e a `UserPolicy` cuida do caso "admin ou o próprio usuário" em `/users/{id}`.

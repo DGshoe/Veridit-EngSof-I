@@ -46,7 +46,10 @@ return [
         |
         */
 
-        'public' => env('JWT_PUBLIC_KEY'),
+        // RS256 (ADR-001): only Identity holds the private key and signs tokens;
+        // the other services get only the public key and can just verify them.
+        // Format: "base64:<PEM in base64>" (see `php artisan jwt:keys`).
+        'public' => App\Support\JwtKey::fromEnv(env('JWT_PUBLIC_KEY')),
 
         /*
         |--------------------------------------------------------------------------
@@ -59,7 +62,7 @@ return [
         |
         */
 
-        'private' => env('JWT_PRIVATE_KEY'),
+        'private' => App\Support\JwtKey::fromEnv(env('JWT_PRIVATE_KEY')),
 
         /*
         |--------------------------------------------------------------------------
@@ -132,7 +135,7 @@ return [
     |
     */
 
-    'algo' => env('JWT_ALGO', 'HS256'),
+    'algo' => env('JWT_ALGO', 'RS256'),
 
     /*
     |--------------------------------------------------------------------------

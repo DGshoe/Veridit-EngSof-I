@@ -21,7 +21,8 @@
         <env name="APP_ENV" value="testing"/>
         <!-- Test-only keys (not used in any real environment) so the suite runs without a .env -->
         <env name="APP_KEY" value="base64:SI77RF/TpbQfCyvoEaJk6t4TIkF/yrbOqn6QMAA/9Ko="/>
-        <env name="JWT_SECRET" value="testing-only-jwt-secret-not-used-anywhere-else-0123456789"/>
+        <!-- JWT RS256: the key pair is generated in memory by tests/TestCase.php -->
+        <env name="JWT_ALGO" value="RS256" force="true"/>
         <env name="APP_LOCALE" value="pt_BR"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
         <env name="BCRYPT_ROUNDS" value="4"/>

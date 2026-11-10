@@ -30,6 +30,15 @@ docker info >/dev/null 2>&1 || { echo "!! Docker não está rodando. Abra o Dock
 hex()     { openssl rand -hex "$1"; }
 app_key() { echo "base64:$(openssl rand -base64 32)"; }
 
+# RSA pair for the JWT (RS256), as single-line "base64:<PEM>" values (see App\Support\JwtKey)
+b64_oneline() { openssl base64 -A; }
+gen_jwt_keys() {
+  local pem
+  pem="$(openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:2048 2>/dev/null)"
+  JWT_PRIVATE="base64:$(printf '%s\n' "$pem" | b64_oneline)"
+  JWT_PUBLIC="base64:$(printf '%s\n' "$pem" | openssl pkey -pubout 2>/dev/null | b64_oneline)"
+}
+
 # Valid CPF with random digits (check digits computed; no repeated sequence)
 gen_cpf() {
   local d i s r w
@@ -61,10 +70,20 @@ echo ">> [3/4] Pasta da produção e .env.production em $DEPLOY_DIR"
 mkdir -p "$DEPLOY_DIR"
 if [ -f "$ENV_FILE" ]; then
   echo "   .env.production já existe: mantido (segredos não foram trocados)"
+  # Upgrade from HS256: add the RS256 pair if the file still has no private key
+  if ! grep -qE '^JWT_PRIVATE_KEY=base64:' "$ENV_FILE"; then
+    gen_jwt_keys
+    sed -i -e '/^JWT_SECRET=/d' -e '/^JWT_ALGO=/d' -e '/^JWT_PRIVATE_KEY=/d' -e '/^JWT_PUBLIC_KEY=/d' "$ENV_FILE"
+    printf '\n# JWT RS256 (adicionado pelo setup-production.sh)\nJWT_ALGO=RS256\nJWT_PRIVATE_KEY=%s\nJWT_PUBLIC_KEY=%s\n' \
+      "$JWT_PRIVATE" "$JWT_PUBLIC" >> "$ENV_FILE"
+    echo "   chaves RS256 do JWT adicionadas (tokens antigos HS256 deixam de valer)"
+  fi
 else
   admin_password="Adm$(hex 10)7"
+  gen_jwt_keys
   sed -e "s|^APP_KEY=.*|APP_KEY=$(app_key)|" \
-      -e "s|^JWT_SECRET=.*|JWT_SECRET=$(hex 32)|" \
+      -e "s|^JWT_PRIVATE_KEY=.*|JWT_PRIVATE_KEY=$JWT_PRIVATE|" \
+      -e "s|^JWT_PUBLIC_KEY=.*|JWT_PUBLIC_KEY=$JWT_PUBLIC|" \
       -e "s|^DB_PASSWORD=.*|DB_PASSWORD=$(hex 24)|" \
       -e "s|^POSTGRES_ADMIN_PASSWORD=.*|POSTGRES_ADMIN_PASSWORD=$(hex 24)|" \
       -e "s|^COMMERCE_DB_PASSWORD=.*|COMMERCE_DB_PASSWORD=$(hex 24)|" \
@@ -77,7 +96,7 @@ else
   if grep -qE '^[^#]*=gerar-' "$ENV_FILE"; then
     echo "!! Sobrou valor 'gerar-*' em $ENV_FILE" >&2; exit 1
   fi
-  echo "   criado com segredos aleatórios (JWT_SECRET e APP_KEY diferentes do dev)"
+  echo "   criado com segredos aleatórios (chaves do JWT e APP_KEY diferentes do dev)"
 fi
 
 echo ">> [4/4] Remote 'production' neste repositório"
