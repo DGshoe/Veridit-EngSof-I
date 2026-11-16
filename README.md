@@ -24,6 +24,7 @@ Evidence e Notification ainda não foram implementados; os bancos deles já são
 4. [URLs](#4-urls)
 5. [Variáveis de ambiente](#5-variáveis-de-ambiente)
 6. [Testes](#6-testes)
+7. [GitHub e CI](#7-github-e-ci)
 
 ---
 
@@ -203,3 +204,26 @@ cd frontend && npm run build                         # front-end (compilação)
 ```
 
 Os testes do backend usam SQLite em memória e nunca acessam serviços externos reais.
+
+---
+
+## 7. GitHub e CI
+
+Repositório: https://github.com/DGshoe/Veridit-EngSof-I
+
+| Branch | Uso |
+|---|---|
+| `dev` | Desenvolvimento do dia a dia (backend e front-end) |
+| `main` | Versão estável e documentação (ADRs, mockups); recebe `dev` por pull request |
+
+O **GitHub Actions** ([.github/workflows/ci.yml](.github/workflows/ci.yml)) roda a cada push e pull request em
+`main` e `dev`:
+
+| Job | O que faz | Quando roda |
+|---|---|---|
+| Identity — testes | Build da imagem `test` e `php artisan test` (os mesmos do deploy) | Mudou `backend/identity/` |
+| Commerce — testes | Idem para o Commerce | Mudou `backend/commerce/` |
+| Front-end — build | `npm ci` + `npm run build` | Mudou `frontend/` |
+
+O CI não usa segredos nem serviços externos. O deploy continua local (`git push production main`), porque a
+produção roda nesta máquina e o GitHub não a alcança.
