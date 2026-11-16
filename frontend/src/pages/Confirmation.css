@@ -1,0 +1,131 @@
+.confirmation-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* Centraliza e limita a largura total da página */
+.confirmation-layout .page-layout-container {
+    max-width: 1100px !important; 
+    margin: 0 auto; 
+    align-items: flex-start !important;
+}
+
+/* Grid dividindo a tela em 2 colunas proporcionais */
+.confirmation-content {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr; /* Esquerda é maior que a direita */
+    gap: 24px;
+    width: 100%;
+    margin-top: 8px;
+}
+
+/* --- COLUNA ESQUERDA (Mensagens) --- */
+.confirmation-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.message-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 24px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    text-align: left;
+}
+
+.message-tag {
+    font-size: 10px;
+    font-weight: 600;
+    color: #4a6b5d;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.message-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #0b3b2e;
+    margin: 0 0 16px 0;
+}
+
+.message-recipient {
+    font-size: 13px;
+    color: #4b5563;
+    margin: 0 0 12px 0;
+}
+
+.message-body {
+    font-size: 14px;
+    color: #4b5563;
+    line-height: 1.5;
+    margin: 0 0 20px 0;
+}
+
+.status-badge {
+    display: inline-block;
+    background-color: #eef2ed;
+    color: #2d5a4c;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 4px;
+}
+
+/* --- COLUNA DIREITA (Acompanhamento) --- */
+.sidebar-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 32px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    text-align: left;
+}
+
+.sidebar-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #0b3b2e;
+    margin: 0 0 16px 0;
+}
+
+.sidebar-text {
+    font-size: 14px;
+    color: #4b5563;
+    line-height: 1.5;
+    margin: 0 0 16px 0;
+}
+
+.highlight-text {
+    color: #8c7362; /* Cor sutil para o texto de destaque da print */
+    margin-bottom: 24px;
+}
+
+.btn-primary {
+    display: inline-block;
+    background-color: #0b3b2e;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #07291f;
+}
+
+/* Responsividade */
+@media (max-width: 900px) {
+    .confirmation-content {
+        grid-template-columns: 1fr; /* Vira 1 coluna em telas menores */
+    }
+}

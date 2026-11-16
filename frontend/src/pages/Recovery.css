@@ -1,0 +1,91 @@
+.recovery-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.recovery-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 32px;
+    width: 100%;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    text-align: left; 
+    box-sizing: border-box; 
+}
+
+.recovery-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; 
+    width: 100%;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 24px;
+    width: 100%; 
+    text-align: left;
+}
+
+.input-group label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #111827;
+    margin-bottom: 8px;
+}
+
+.input-group input {
+    width: 100%;
+    box-sizing: border-box; 
+    padding: 12px 14px;
+    border: 1px solid #d1d5db; 
+    border-radius: 6px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+    background-color: transparent; 
+    color: #000000; 
+    color-scheme: light; 
+}
+
+.input-group input:focus {
+    border-color: #0b3b2e;
+    box-shadow: 0 0 0 1px #0b3b2e;
+}
+
+.btn-primary {
+    background-color: #0b3b2e;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    align-self: flex-start; 
+}
+
+.btn-primary:hover {
+    background-color: #07291f;
+}
+
+.recovery-footer {
+    margin-top: 32px;
+    width: 100%;
+    text-align: left; 
+}
+
+.link-voltar {
+    font-size: 14px;
+    color: #0b3b2e;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.link-voltar:hover {
+    color: #07291f;
+}

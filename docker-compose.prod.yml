@@ -18,20 +18,20 @@ x-postgres: &postgres
 
 x-app: &app
   build:
-    context: .
+    context: ./backend/identity
     dockerfile: docker/php/Dockerfile
     target: production
   image: veridit-identity:prod
-  env_file: .env.production
+  env_file: ./backend/identity/.env.production
   restart: unless-stopped
 
 x-commerce: &commerce
   build:
-    context: ./commerce
+    context: ./backend/commerce
     dockerfile: docker/php/Dockerfile
     target: production
   image: veridit-commerce:prod
-  env_file: ./commerce/.env.production
+  env_file: ./backend/commerce/.env.production
   restart: unless-stopped
 
 services:
@@ -53,7 +53,7 @@ services:
 
   web:
     build:
-      context: .
+      context: ./backend/identity
       dockerfile: docker/nginx/Dockerfile
     image: veridit-identity-web:prod
     restart: unless-stopped
@@ -62,7 +62,7 @@ services:
     depends_on:
       - app
 
-  # ---------------- Commerce Service (commerce/) ----------------
+  # ---------------- Commerce Service (backend/commerce/) ----------------
   commerce-app:
     <<: *commerce
     depends_on:
@@ -81,7 +81,7 @@ services:
 
   commerce-web:
     build:
-      context: ./commerce
+      context: ./backend/commerce
       dockerfile: docker/nginx/Dockerfile
     image: veridit-commerce-web:prod
     restart: unless-stopped
@@ -94,9 +94,9 @@ services:
     <<: *postgres
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_ADMIN_PASSWORD:?defina POSTGRES_ADMIN_PASSWORD no .env.production}
-      APP_DB_NAME: ${DB_DATABASE:-identity}
-      APP_DB_USER: ${DB_USERNAME:-identity_app}
-      APP_DB_PASSWORD: ${DB_PASSWORD:?defina DB_PASSWORD no .env.production}
+      APP_DB_NAME: identity
+      APP_DB_USER: identity_app
+      APP_DB_PASSWORD: ${IDENTITY_DB_PASSWORD:?defina IDENTITY_DB_PASSWORD no .env.production}
     ports:
       - "127.0.0.1:5442:5432"   # só para inspeção
     volumes:

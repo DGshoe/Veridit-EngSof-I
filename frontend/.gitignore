@@ -1,0 +1,10 @@
+node_modules/
+dist/
+
+# Local settings (API URLs per machine); only .env.example is versioned
+.env
+.env.local
+.env.*.local
+
+*.log
+.DS_Store

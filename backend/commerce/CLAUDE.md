@@ -2,7 +2,7 @@
 
 > **Para o Claude Code:** especificação do Commerce. Siga as **Fases** da seção 10 na ordem e só avance
 > quando os critérios de aceite da fase atual passarem. Em dúvida sobre regra de negócio, **pergunte**.
-> Não crie front-end. Padrões de código, idioma, Docker e privacidade seguem o Identity (`../CLAUDE.md`).
+> Não crie front-end. Padrões de código, idioma, Docker e privacidade seguem o Identity (`../identity/CLAUDE.md`).
 
 ---
 
@@ -146,7 +146,7 @@ token de serviço inválido (401); outbox gravado junto com o crédito.
 
 | Fase | Entrega | Critério de aceite |
 |------|---------|--------------------|
-| 1 | Projeto Laravel em `commerce/` + Docker dev | `http://localhost:8001/api/v1/health` = 200 com banco `commerce` |
+| 1 | Projeto Laravel em `backend/commerce/` + Docker dev | `http://localhost:8001/api/v1/health` = 200 com banco `commerce` |
 | 2 | Pacotes, pedidos, JWT do Identity | Testes de catálogo, pedido e autenticação passando |
 | 3 | Wallet/Ledger + consumo de crédito (contrato Evidence) | Testes de saldo e idempotência passando |
 | 4 | Simulador de pagamento + webhook + inbox + outbox | Fluxo completo simulado; webhook repetido credita 1 vez |

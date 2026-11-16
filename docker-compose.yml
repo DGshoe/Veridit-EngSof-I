@@ -1,6 +1,7 @@
-# Veridit Identity Service — DESENVOLVIMENTO
+# Veridit — DESENVOLVIMENTO (Identity :8000, Commerce :8001)
 #   docker compose up -d
-# Variáveis interpoladas a partir do .env (copie de .env.example).
+# Senhas dos bancos: .env da raiz (copie de .env.example). Cada serviço tem o próprio .env
+# em backend/identity/ e backend/commerce/.
 # Todas as portas publicadas apenas em 127.0.0.1.
 
 name: veridit_dev
@@ -20,14 +21,14 @@ x-postgres: &postgres
 services:
   app:
     build:
-      context: .
+      context: ./backend/identity
       dockerfile: docker/php/Dockerfile
       target: base
     image: veridit-identity:dev
     command: ["php-fpm", "-R"]   # -R: allow workers as root (dev only, see fpm-dev.conf)
     volumes:
-      - ./:/var/www/html
-      - ./docker/php/fpm-dev.conf:/usr/local/etc/php-fpm.d/zz-dev.conf:ro
+      - ./backend/identity:/var/www/html
+      - ./backend/identity/docker/php/fpm-dev.conf:/usr/local/etc/php-fpm.d/zz-dev.conf:ro
     depends_on:
       identity-db:
         condition: service_healthy
@@ -37,14 +38,14 @@ services:
   # Worker da fila (e-mails de recuperação de senha — REQ02)
   queue:
     build:
-      context: .
+      context: ./backend/identity
       dockerfile: docker/php/Dockerfile
       target: base
     image: veridit-identity:dev
     command: ["php", "artisan", "queue:work", "--tries=3", "--sleep=1"]
     restart: unless-stopped
     volumes:
-      - ./:/var/www/html
+      - ./backend/identity:/var/www/html
     depends_on:
       app:
         condition: service_started
@@ -56,22 +57,22 @@ services:
     ports:
       - "127.0.0.1:8000:80"
     volumes:
-      - ./:/var/www/html:ro
-      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./backend/identity:/var/www/html:ro
+      - ./backend/identity/docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - app
 
-  # ---------------- Commerce Service (commerce/) ----------------
+  # ---------------- Commerce Service (backend/commerce/) ----------------
   commerce-app:
     build:
-      context: ./commerce
+      context: ./backend/commerce
       dockerfile: docker/php/Dockerfile
       target: base
     image: veridit-commerce:dev
-    command: ["php-fpm", "-R"]   # dev only, see commerce/docker/php/fpm-dev.conf
+    command: ["php-fpm", "-R"]   # dev only, see backend/commerce/docker/php/fpm-dev.conf
     volumes:
-      - ./commerce:/var/www/html
-      - ./commerce/docker/php/fpm-dev.conf:/usr/local/etc/php-fpm.d/zz-dev.conf:ro
+      - ./backend/commerce:/var/www/html
+      - ./backend/commerce/docker/php/fpm-dev.conf:/usr/local/etc/php-fpm.d/zz-dev.conf:ro
     depends_on:
       commerce-db:
         condition: service_healthy
@@ -82,7 +83,7 @@ services:
     command: ["php", "artisan", "queue:work", "--tries=3", "--sleep=1"]
     restart: unless-stopped
     volumes:
-      - ./commerce:/var/www/html
+      - ./backend/commerce:/var/www/html
     depends_on:
       commerce-app:
         condition: service_started
@@ -94,8 +95,8 @@ services:
     ports:
       - "127.0.0.1:8001:80"
     volumes:
-      - ./commerce:/var/www/html:ro
-      - ./commerce/docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./backend/commerce:/var/www/html:ro
+      - ./backend/commerce/docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - commerce-app
 
@@ -103,9 +104,9 @@ services:
     <<: *postgres
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_ADMIN_PASSWORD:?defina POSTGRES_ADMIN_PASSWORD no .env}
-      APP_DB_NAME: ${DB_DATABASE:-identity}
-      APP_DB_USER: ${DB_USERNAME:-identity_app}
-      APP_DB_PASSWORD: ${DB_PASSWORD:?defina DB_PASSWORD no .env}
+      APP_DB_NAME: identity
+      APP_DB_USER: identity_app
+      APP_DB_PASSWORD: ${IDENTITY_DB_PASSWORD:?defina IDENTITY_DB_PASSWORD no .env}
     ports:
       - "127.0.0.1:5432:5432"
     volumes:
