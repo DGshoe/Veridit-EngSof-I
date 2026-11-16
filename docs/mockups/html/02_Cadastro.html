@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Veridit — Cadastro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Instrument+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFFFFF}
+a{color:#111111}a:hover{color:#B0102A}
+</style>
+</head>
+<body>
+<div style="min-height: 100vh; background: #FFFFFF; color: #111111; font-family: 'Instrument Sans', system-ui, sans-serif">
+  <div style="max-width: 1240px; margin: 0 auto; padding: 0 40px; box-sizing: border-box">
+
+    <header style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0 18px; border-bottom: 2px solid #111111">
+      <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 34px; letter-spacing: 3px">VERIDIT</span>
+      <span style="font-size: 14px; color: #4A4A4A">Já tem conta? <a href="01_Login.html" style="font-weight: 600">Entrar →</a></span>
+    </header>
+
+    <main style="display: flex; flex-wrap: wrap; gap: 56px; padding: 48px 0 56px">
+      <div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">Novo cadastro</span>
+        <h1 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 60px; line-height: 1; letter-spacing: -1px">Abra sua conta no Veridit.</h1>
+        <p style="margin: 0; font-size: 16px; color: #4A4A4A; line-height: 1.55">Depois do cadastro, enviaremos um e-mail para confirmar o seu endereço. Só então a conta é ativada.</p>
+      </div>
+
+      <form style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 30px; border-left: 1px solid #111111; padding-left: 48px; box-sizing: border-box">
+        <fieldset style="border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px">
+          <legend style="font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; margin-bottom: 14px">Tipo de conta</legend>
+          <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px">
+            <label style="display: flex; flex-direction: column; gap: 6px; border: 1.5px solid #111111; background: #111111; color: #FFFFFF; padding: 16px; cursor: pointer">
+              <span style="display: flex; align-items: center; gap: 10px; font-weight: 700"><input type="radio" name="perfil" checked style="accent-color: #FFFFFF">Advogado</span>
+              <span style="font-size: 13px; color: #D9D9D9">Inclui número da OAB no relatório.</span>
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 6px; border: 1.5px solid #111111; padding: 16px; cursor: pointer">
+              <span style="display: flex; align-items: center; gap: 10px; font-weight: 700"><input type="radio" name="perfil" style="accent-color: #111111">Usuário comum</span>
+              <span style="font-size: 13px; color: #4A4A4A">Pessoa física.</span>
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 6px; border: 1.5px dashed #9A9A9A; padding: 16px; color: #6B6B6B">
+              <span style="display: flex; align-items: center; gap: 10px; font-weight: 700"><input type="radio" name="perfil" disabled>Empresa</span>
+              <span style="font-size: 13px">Em breve.</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px 32px">
+          <label style="grid-column: span 2; display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">Nome completo
+            <input type="text" value="Júlio Cesar Coelho" style="border: 0; border-bottom: 1.5px solid #111111; padding: 8px 0 10px; font: 400 18px 'Instrument Sans', sans-serif; letter-spacing: 0; text-transform: none; color: #111111; outline: 0; background: transparent"></label>
+          <label style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">CPF
+            <input type="text" placeholder="000.000.000-00" style="border: 0; border-bottom: 1.5px solid #111111; padding: 8px 0 10px; font: 400 18px 'Instrument Sans', sans-serif; letter-spacing: 0; text-transform: none; color: #111111; outline: 0; background: transparent"></label>
+          <label style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">Telefone
+            <input type="tel" placeholder="(00) 00000-0000" style="border: 0; border-bottom: 1.5px solid #111111; padding: 8px 0 10px; font: 400 18px 'Instrument Sans', sans-serif; letter-spacing: 0; text-transform: none; color: #111111; outline: 0; background: transparent"></label>
+          <label style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">Número da OAB
+            <input type="text" placeholder="000000" style="border: 0; border-bottom: 1.5px solid #111111; padding: 8px 0 10px; font: 400 18px 'Instrument Sans', sans-serif; letter-spacing: 0; text-transform: none; color: #111111; outline: 0; background: transparent"></label>
+          <label style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">UF da OAB
+            <select style="border: 0; border-bottom: 1.5px solid #111111; padding: 8px 0 10px; font: 400 18px 'Instrument Sans', sans-serif; letter-spacing: 0; text-transform: none; color: #111111; outline: 0; background: transparent"><option>BA</option><option>SP</option><option>RJ</option></select></label>
+          <label style="grid-column: span 2; display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">E-mail
+            <input type="email" placeholder="voce@exemplo.com.br" style="border: 0; border-bottom: 1.5px solid #111111; padding: 8px 0 10px; font: 400 18px 'Instrument Sans', sans-serif; letter-spacing: 0; text-transform: none; color: #111111; outline: 0; background: transparent"></label>
+          <label style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">Senha
+            <input type="password" placeholder="Mínimo de 8 caracteres" style="border: 0; border-bottom: 1.5px solid #111111; padding: 8px 0 10px; font: 400 18px 'Instrument Sans', sans-serif; letter-spacing: 0; text-transform: none; color: #111111; outline: 0; background: transparent"></label>
+          <label style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">Confirmar senha
+            <input type="password" style="border: 0; border-bottom: 1.5px solid #111111; padding: 8px 0 10px; font: 400 18px 'Instrument Sans', sans-serif; letter-spacing: 0; text-transform: none; color: #111111; outline: 0; background: transparent"></label>
+        </div>
+
+        <label style="display: flex; align-items: flex-start; gap: 12px; font-size: 14px; line-height: 1.5"><input type="checkbox" style="width: 18px; height: 18px; margin-top: 2px; accent-color: #111111">Li e aceito os <a href="#" style="font-weight: 600">Termos de uso</a> e a <a href="#" style="font-weight: 600">Política de privacidade</a>.</label>
+
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 20px; border-top: 1px solid #111111; padding-top: 24px">
+          <a href="01_Login.html" style="display: flex; align-items: center; justify-content: center; background: #111111; color: #FFFFFF; height: 54px; padding: 0 30px; text-decoration: none; font-size: 14px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase">Criar conta →</a>
+          <span style="font-size: 13px; color: #4A4A4A">Você receberá um e-mail de confirmação.</span>
+        </div>
+      </form>
+    </main>
+  </div>
+</div>
+</body>
+</html>

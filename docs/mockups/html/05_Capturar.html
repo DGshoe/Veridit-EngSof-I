@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Veridit — Nova captura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Instrument+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FFFFFF}
+a{color:#111111}a:hover{color:#B0102A}
+</style>
+</head>
+<body>
+<div style="min-height: 100vh; background: #FFFFFF; color: #111111; font-family: 'Instrument Sans', system-ui, sans-serif">
+  <div style="max-width: 1240px; margin: 0 auto; padding: 0 40px; box-sizing: border-box">
+
+    <header style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 0 18px; border-bottom: 2px solid #111111">
+      <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 34px; letter-spacing: 3px">VERIDIT</span>
+      <nav aria-label="Menu principal" style="display: flex; flex-wrap: wrap; gap: 4px; font-size: 13px; font-weight: 600; letter-spacing: 1.6px; text-transform: uppercase">
+        <a href="04_Painel.html" style="text-decoration: none; padding: 12px 12px; color: #4A4A4A">Painel</a>
+        <a href="05_Capturar.html" aria-current="page" style="text-decoration: none; padding: 12px 12px; border-bottom: 2px solid #111111">Capturar</a>
+        <a href="06_Registros.html" style="text-decoration: none; padding: 12px 12px; color: #4A4A4A">Registros</a>
+        <a href="09_Creditos.html" style="text-decoration: none; padding: 12px 12px; color: #4A4A4A">Créditos</a>
+        <a href="12_Conta.html" style="text-decoration: none; padding: 12px 12px; color: #4A4A4A">Conta</a>
+      </nav>
+    </header>
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; padding: 10px 0; border-bottom: 1px solid #111111; font-size: 13px; color: #4A4A4A">
+      <span>Saldo: <strong style="color: #111111">12 créditos</strong></span>
+      <span>Dr. Júlio Cesar · Advogado · OAB [UF 000000]</span>
+    </div>
+
+    <main style="display: flex; flex-wrap: wrap; gap: 0; padding-bottom: 48px">
+      <form style="flex: 999 1 600px; min-width: 0; padding: 44px 48px 0 0; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px">
+        <div style="display: flex; flex-direction: column; gap: 10px">
+          <span style="font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">Nova captura</span>
+          <h1 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 60px; line-height: 1; letter-spacing: -1px">O que você quer <em style="font-style: italic; color: #B0102A">registrar</em>?</h1>
+        </div>
+
+        <label style="display: flex; flex-direction: column; gap: 10px; font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">Endereço da página
+          <input type="url" value="https://loja-exemplo.com.br/produto/123" style="border: 0; border-bottom: 2px solid #111111; padding: 6px 0 12px; font: 400 28px 'Instrument Serif', Georgia, serif; letter-spacing: 0; text-transform: none; color: #111111; outline: 0; background: transparent"></label>
+
+        <fieldset style="border: 0; padding: 0; margin: 0">
+          <legend style="font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; margin-bottom: 14px">Formato</legend>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; border: 1.5px solid #111111">
+            <label style="display: flex; flex-direction: column; gap: 10px; padding: 22px; background: #111111; color: #FFFFFF; cursor: pointer">
+              <span style="display: flex; align-items: center; justify-content: space-between"><span style="font-family: 'Instrument Serif', serif; font-size: 28px">Captura de tela</span><input type="radio" name="fmt" checked style="width: 18px; height: 18px; accent-color: #FFFFFF"></span>
+              <span style="font-size: 14px; color: #D9D9D9">Imagem da página inteira, com toda a rolagem.</span>
+              <span style="font-size: 12px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase">[CUSTO] crédito</span>
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 10px; padding: 22px; border-left: 1.5px solid #111111; cursor: pointer">
+              <span style="display: flex; align-items: center; justify-content: space-between"><span style="font-family: 'Instrument Serif', serif; font-size: 28px">Vídeo de navegação</span><input type="radio" name="fmt" style="width: 18px; height: 18px; accent-color: #111111"></span>
+              <span style="font-size: 14px; color: #4A4A4A">Gravação da navegação pelo site, clique a clique.</span>
+              <span style="font-size: 12px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase">[CUSTO] créditos</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 28px">
+          <fieldset style="border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px">
+            <legend style="font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; margin-bottom: 8px">Versão da página</legend>
+            <label style="display: flex; align-items: center; gap: 10px; font-size: 15px; min-height: 40px"><input type="checkbox" checked style="width: 18px; height: 18px; accent-color: #111111">Computador</label>
+            <label style="display: flex; align-items: center; gap: 10px; font-size: 15px; min-height: 40px"><input type="checkbox" style="width: 18px; height: 18px; accent-color: #111111">Celular</label>
+          </fieldset>
+          <label style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">Referência interna (opcional)
+            <input type="text" placeholder="Ex.: processo, cliente ou pasta" style="border: 0; border-bottom: 1.5px solid #111111; padding: 8px 0 10px; font: 400 17px 'Instrument Sans', sans-serif; letter-spacing: 0; text-transform: none; color: #111111; outline: 0; background: transparent"></label>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px; border-top: 2px solid #111111; padding-top: 22px">
+          <dl style="margin: 0; display: flex; gap: 32px; font-size: 14px">
+            <div><dt style="color: #4A4A4A">Será debitado</dt><dd style="margin: 4px 0 0; font-family: 'Instrument Serif', serif; font-size: 28px">[CUSTO]</dd></div>
+            <div><dt style="color: #4A4A4A">Saldo após</dt><dd style="margin: 4px 0 0; font-family: 'Instrument Serif', serif; font-size: 28px">[N]</dd></div>
+          </dl>
+          <button type="button" style="background: #111111; color: #FFFFFF; border: 0; height: 56px; padding: 0 30px; font: 700 14px 'Instrument Sans', sans-serif; letter-spacing: 1.4px; text-transform: uppercase; cursor: pointer">Registrar agora →</button>
+        </div>
+        <p style="margin: -14px 0 0; font-size: 13px; color: #4A4A4A">Se a captura falhar, o crédito volta automaticamente. Você recebe um e-mail quando terminar.</p>
+      </form>
+
+      <aside aria-labelledby="cust" style="flex: 1 1 340px; min-width: 0; border-left: 1px solid #111111; padding: 44px 0 0 40px; box-sizing: border-box; display: flex; flex-direction: column; gap: 18px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase">Em andamento · Nº 0026</span>
+        <h2 id="cust" style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 34px">Cadeia de custódia</h2>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #4A4A4A">rede-social-exemplo.com/post/88</span>
+        <ol style="list-style: none; margin: 0; padding: 0; border-top: 1px solid #111111">
+          <li style="display: flex; gap: 14px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #D4D4D4"><span style="width: 9px; height: 9px; background: #1D6B3E; flex: none"></span><span style="flex: 1">Pedido recebido</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px">13:47:02</span></li>
+          <li style="display: flex; gap: 14px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #D4D4D4"><span style="width: 9px; height: 9px; background: #1D6B3E; flex: none"></span><span style="flex: 1">Página acessada pelo servidor</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px">13:47:05</span></li>
+          <li style="display: flex; gap: 14px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #D4D4D4; color: #B0102A; font-weight: 600"><span style="width: 9px; height: 9px; border: 1.5px solid #B0102A; box-sizing: border-box; flex: none"></span><span style="flex: 1">Gravando navegação…</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px">agora</span></li>
+          <li style="display: flex; gap: 14px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #D4D4D4; color: #6B6B6B"><span style="width: 9px; height: 9px; border: 1.5px solid #9A9A9A; box-sizing: border-box; flex: none"></span><span style="flex: 1">Hash SHA-256 dos arquivos</span></li>
+          <li style="display: flex; gap: 14px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #D4D4D4; color: #6B6B6B"><span style="width: 9px; height: 9px; border: 1.5px solid #9A9A9A; box-sizing: border-box; flex: none"></span><span style="flex: 1">Carimbo de tempo</span></li>
+          <li style="display: flex; gap: 14px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #D4D4D4; color: #6B6B6B"><span style="width: 9px; height: 9px; border: 1.5px solid #9A9A9A; box-sizing: border-box; flex: none"></span><span style="flex: 1">Relatório e pacote .zip</span></li>
+        </ol>
+        <a href="06_Registros.html" style="font-size: 14px; font-weight: 600; padding: 8px 0">Ver livro de registros →</a>
+      </aside>
+    </main>
+  </div>
+</div>
+</body>
+</html>
