@@ -26,6 +26,12 @@
         <env name="COMMERCE_SERVICE_TOKEN" value="testing-only-service-token" force="true"/>
         <env name="PAYMENTS_SIMULATOR_ENABLED" value="true" force="true"/>
         <env name="PAYMENTS_SIMULATOR_WEBHOOK_SECRET" value="testing-only-simulator-secret" force="true"/>
+        <!-- Never use the developer's real Mercado Pago credentials (tests that need MP set fake config + Http::fake) -->
+        <env name="MERCADOPAGO_ACCESS_TOKEN" value="" force="true"/>
+        <env name="MERCADOPAGO_PUBLIC_KEY" value="" force="true"/>
+        <env name="MERCADOPAGO_WEBHOOK_SECRET" value="" force="true"/>
+        <env name="MERCADOPAGO_NOTIFICATION_URL" value="" force="true"/>
+        <env name="MERCADOPAGO_API_URL" value="https://api.mercadopago.invalid" force="true"/>
         <env name="IDENTITY_URL" value="http://identity.test" force="true"/>
         <env name="APP_MAINTENANCE_DRIVER" value="file"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
