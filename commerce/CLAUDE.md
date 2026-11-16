@@ -78,8 +78,7 @@ Regras derivadas:
 | GET | `/orders/{id}` | JWT | Detalhe (dono ou admin) |
 | POST | `/orders/{id}/simulate` | JWT | **Simulador** (T06): `outcome` = `aprovado`/`recusado`. Só com `PAYMENTS_SIMULATOR_ENABLED=true` |
 | POST | `/webhooks/simulator` | assinatura HMAC | Webhook do simulador (mesmo caminho dos provedores reais) |
-| POST | `/webhooks/mercadopago` | assinatura `x-signature` | Webhook Mercado Pago (Fase 6) |
-| POST | `/webhooks/pix` | conforme PSP | Webhook PIX do PSP (Fase 7) |
+| POST | `/webhooks/mercadopago` | assinatura `x-signature` | Webhook Mercado Pago: confirma pedidos `mercadopago` **e** `pix` (Fases 6 e 7) |
 | GET | `/wallet` | JWT | Saldo do usuário |
 | GET | `/wallet/entries` | JWT | Extrato (lançamentos), paginado |
 | POST | `/internal/credits/consume` | `X-Service-Token` | **Contrato para o Evidence**: `user_id`, `capture_id`, `capture_type` (`imagem`/`video`) |
@@ -94,15 +93,22 @@ Formato de respostas e erros: igual ao Identity (`data`/`meta`/`message`/`errors
 - Perfil vem da claim `type`; `admin` vê todos os pedidos.
 - Webhooks: assinatura obrigatória, comparação em tempo constante; assinatura inválida → 401, sem detalhes.
 - `/internal/*`: token de serviço (`COMMERCE_SERVICE_TOKEN`), nunca exposto ao front.
-- Segredos de provedores só em `.env`; certificados PIX fora do Git (`commerce/storage/certs/`).
+- Segredos de provedores só em `.env`.
 
 ---
 
 ## 6. Payments Adapter (ADR-006)
 
 Interface `PaymentGateway` com `createCharge(Order): Charge` e `parseWebhook(Request): PaymentEvent`.
-Implementações: `SimulatorGateway` (Fase 4), `MercadoPagoGateway` (Fase 6), `PixGateway` (Fase 7, PSP a definir).
+Implementações: `SimulatorGateway` (Fase 4), `MercadoPagoGateway` (Fase 6) e `MercadoPagoPixGateway` (Fase 7).
 Todas convergem para o **mesmo** `PaymentEventProcessor` (inbox → status do pedido → crédito → outbox).
+
+Formas de pagamento oferecidas ao comprador:
+- **`mercadopago`** — Checkout Pro: o comprador é redirecionado para a página do Mercado Pago (cartão, saldo, PIX).
+- **`pix`** — o **próprio Veridit** mostra o QR Code e o "PIX copia e cola", gerados pela API de pagamentos do
+  Mercado Pago (`POST /v1/payments`, `payment_method_id=pix`), que atua como PSP. O QR expira em
+  `MERCADOPAGO_PIX_EXPIRATION_MINUTES` (mín. 30); expirado, o Mercado Pago cancela e o pedido vai para `falhou`.
+  A confirmação chega no mesmo webhook do Mercado Pago (`PaymentMethod::provider()` / `settledBy()`).
 
 ---
 
@@ -146,6 +152,6 @@ token de serviço inválido (401); outbox gravado junto com o crédito.
 | 4 | Simulador de pagamento + webhook + inbox + outbox | Fluxo completo simulado; webhook repetido credita 1 vez |
 | 5 | Swagger | `/api/documentation` com todos os endpoints |
 | 6 | Mercado Pago (sandbox) | Pagamento de teste credita via webhook (precisa de credenciais) |
-| 7 | PIX via PSP (sandbox) | Idem (precisa do PSP escolhido e credenciais) |
+| 7 | PIX com QR Code no Veridit (PSP: Mercado Pago) | QR gerado e pago no sandbox credita via webhook (precisa de credenciais e chave PIX na conta MP) |
 | 8 | Relay do outbox → Notification (REQ07) | E-mail de compra enviado |
 | 9 | Docker produção + deploy | `git push production main` publica o Commerce |

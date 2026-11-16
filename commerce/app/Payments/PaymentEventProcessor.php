@@ -3,6 +3,7 @@
 namespace App\Payments;
 
 use App\Enums\OrderStatus;
+use App\Enums\PaymentMethod;
 use App\Models\Order;
 use App\Models\OutboxMessage;
 use App\Models\PaymentEvent;
@@ -67,7 +68,8 @@ class PaymentEventProcessor
     /** Locks the order the event refers to (by our id, when echoed by the provider, or by its payment id). */
     private function findOrder(ProviderEvent $event): ?Order
     {
-        $query = Order::query()->where('payment_method', $event->provider->value);
+        // A provider settles only the orders it charged (Mercado Pago: checkout and PIX orders).
+        $query = Order::query()->whereIn('payment_method', PaymentMethod::settledBy($event->provider));
 
         if ($event->orderId !== null) {
             if (! Str::isUuid($event->orderId)) {

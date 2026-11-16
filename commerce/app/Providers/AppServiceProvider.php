@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Auth\IdentityTokenVerifier;
 use App\Payments\Gateways\MercadoPagoGateway;
+use App\Payments\Gateways\MercadoPagoPixGateway;
 use App\Payments\Gateways\SimulatorGateway;
 use Illuminate\Http\Client\Factory as HttpClient;
 use Illuminate\Http\Request;
@@ -24,6 +25,11 @@ class AppServiceProvider extends ServiceProvider
         ));
 
         $this->app->bind(MercadoPagoGateway::class, fn ($app) => new MercadoPagoGateway(
+            http: $app->make(HttpClient::class),
+            config: (array) config('commerce.payments.mercadopago'),
+        ));
+
+        $this->app->bind(MercadoPagoPixGateway::class, fn ($app) => new MercadoPagoPixGateway(
             http: $app->make(HttpClient::class),
             config: (array) config('commerce.payments.mercadopago'),
         ));

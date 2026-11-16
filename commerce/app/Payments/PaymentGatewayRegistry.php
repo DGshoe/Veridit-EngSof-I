@@ -4,9 +4,9 @@ namespace App\Payments;
 
 use App\Enums\PaymentMethod;
 use App\Payments\Gateways\MercadoPagoGateway;
+use App\Payments\Gateways\MercadoPagoPixGateway;
 use App\Payments\Gateways\SimulatorGateway;
 use Illuminate\Contracts\Container\Container;
-use LogicException;
 
 /** Picks the gateway (adapter) for a payment method. */
 class PaymentGatewayRegistry
@@ -18,7 +18,7 @@ class PaymentGatewayRegistry
         return match ($method) {
             PaymentMethod::Simulator => $this->container->make(SimulatorGateway::class),
             PaymentMethod::MercadoPago => $this->container->make(MercadoPagoGateway::class),
-            PaymentMethod::Pix => throw new LogicException("Gateway {$method->value} ainda não implementado."),
+            PaymentMethod::Pix => $this->container->make(MercadoPagoPixGateway::class),
         };
     }
 }

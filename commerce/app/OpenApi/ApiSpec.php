@@ -86,8 +86,17 @@ use OpenApi\Attributes as OA;
         new OA\Property(property: 'payment', properties: [
             new OA\Property(property: 'method', type: 'string', enum: ['simulador', 'mercadopago', 'pix'], example: 'simulador'),
             new OA\Property(property: 'provider_payment_id', type: 'string', nullable: true, example: 'sim_6f1c2a4e-3b8d-4f0e-9a51-2c7d8e9f0a1b'),
-            new OA\Property(property: 'data', type: 'object', nullable: true, description: 'Dados do provedor (ex.: QR Code PIX, link de checkout, instruções).',
-                example: ['instructions' => 'Ambiente de simulação: nenhum valor é cobrado.']),
+            new OA\Property(property: 'data', type: 'object', nullable: true,
+                description: 'Dados do provedor. **pix**: `qr_code` (copia e cola), `qr_code_image` (PNG em data URI, use direto no `<img src>`), '
+                    .'`ticket_url`, `expires_at`, `instructions`. **mercadopago**: `checkout_url`, `sandbox_checkout_url`, `instructions`. '
+                    .'**simulador**: `instructions`. Depois do pagamento, inclui `paid_payment_id`.',
+                example: [
+                    'qr_code' => '00020126580014br.gov.bcb.pix0136...5204000053039865406065.005802BR...6304ABCD',
+                    'qr_code_image' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...',
+                    'ticket_url' => 'https://www.mercadopago.com.br/payments/123456789/ticket',
+                    'expires_at' => '2026-11-16T15:30:00-03:00',
+                    'instructions' => 'Abra o app do seu banco, escolha pagar com PIX e escaneie o QR Code (ou use o "PIX copia e cola"). Total: R$ 65,00. ...',
+                ]),
         ], type: 'object'),
         new OA\Property(property: 'billing', description: 'Faturamento (T05): só dados do cadastro no Identity; CPF mascarado.', properties: [
             new OA\Property(property: 'name', type: 'string', example: 'Maria Souza'),

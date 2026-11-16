@@ -38,7 +38,11 @@ class OrderController extends Controller
             properties: [
                 new OA\Property(property: 'package', type: 'string', enum: ['basico', 'medio', 'premium'], example: 'medio'),
                 new OA\Property(property: 'payment_method', type: 'string', enum: ['simulador', 'mercadopago', 'pix'],
-                    description: 'Disponível hoje: simulador (quando PAYMENTS_SIMULATOR_ENABLED=true).', example: 'simulador'),
+                    description: "`pix`: o Veridit mostra o QR Code (`payment.data.qr_code_image`) e o PIX copia e cola (`payment.data.qr_code`); "
+                        ."consulte `GET /orders/{id}` até `status` virar `pago`.\n\n"
+                        ."`mercadopago`: redirecione o comprador para `payment.data.checkout_url` (cartão, saldo MP ou PIX na página do Mercado Pago).\n\n"
+                        .'`simulador`: só para testes (PAYMENTS_SIMULATOR_ENABLED=true). Formas não configuradas no ambiente → 422.',
+                    example: 'pix'),
             ],
         )),
         responses: [

@@ -52,6 +52,10 @@ return [
             'back_url' => env('MERCADOPAGO_BACK_URL'),
             'api_url' => env('MERCADOPAGO_API_URL', 'https://api.mercadopago.com'),
             'timeout' => (int) env('MERCADOPAGO_TIMEOUT', 10),
+            // PIX with the QR Code shown by Veridit itself (payment_method "pix"). The MP account needs a PIX key.
+            'pix_enabled' => (bool) env('MERCADOPAGO_PIX_ENABLED', true),
+            // How long the QR Code stays payable (Mercado Pago accepts 30 min to 30 days)
+            'pix_expiration_minutes' => (int) env('MERCADOPAGO_PIX_EXPIRATION_MINUTES', 30),
         ],
     ],
 

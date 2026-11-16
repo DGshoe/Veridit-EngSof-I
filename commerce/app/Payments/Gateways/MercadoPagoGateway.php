@@ -30,8 +30,8 @@ use Throwable;
 class MercadoPagoGateway implements PaymentGateway
 {
     public function __construct(
-        private readonly HttpClient $http,
-        private readonly array $config,
+        protected readonly HttpClient $http,
+        protected readonly array $config,
     ) {}
 
     public function method(): PaymentMethod
@@ -182,7 +182,7 @@ class MercadoPagoGateway implements PaymentGateway
         return $response->json();
     }
 
-    private function api(): PendingRequest
+    protected function api(): PendingRequest
     {
         return $this->http
             ->baseUrl(rtrim($this->config['api_url'], '/'))
