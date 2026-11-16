@@ -72,7 +72,11 @@ class OrderService
         } catch (Throwable $e) {
             $order->update(['status' => OrderStatus::Failed, 'failed_at' => now()]);
 
-            throw new PaymentProviderUnavailableException($order->payment_method->value, $e::class);
+            // Gateways only put the provider's error code/description in the message (no tokens, no personal data)
+            throw new PaymentProviderUnavailableException(
+                $order->payment_method->value,
+                $e::class.': '.mb_strimwidth($e->getMessage(), 0, 300, '...'),
+            );
         }
 
         $order->update([

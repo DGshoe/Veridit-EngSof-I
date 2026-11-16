@@ -13,6 +13,7 @@ use App\Payments\ProviderEvent;
 use App\Support\Money;
 use Illuminate\Http\Client\Factory as HttpClient;
 use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Http\Client\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use RuntimeException;
@@ -73,7 +74,7 @@ class MercadoPagoGateway implements PaymentGateway
             ->post('/checkout/preferences', $payload);
 
         if (! $response->successful() || ! $response->json('id') || ! $response->json('init_point')) {
-            throw new RuntimeException('Mercado Pago recusou a preferência: HTTP '.$response->status());
+            throw new RuntimeException('Mercado Pago recusou a preferência: HTTP '.$response->status().$this->providerError($response));
         }
 
         return new Charge((string) $response->json('id'), [
@@ -180,6 +181,23 @@ class MercadoPagoGateway implements PaymentGateway
         }
 
         return $response->json();
+    }
+
+    /** Mercado Pago's error code/description for the logs (never the request body, which has payer data). */
+    protected function providerError(Response $response): string
+    {
+        $causes = collect((array) $response->json('cause'))
+            ->map(fn ($cause) => is_array($cause) ? trim(($cause['code'] ?? '').' '.($cause['description'] ?? '')) : null)
+            ->filter()
+            ->implode('; ');
+
+        $message = trim(implode(' | ', array_filter([
+            is_string($response->json('error')) ? $response->json('error') : null,
+            is_string($response->json('message')) ? $response->json('message') : null,
+            $causes ?: null,
+        ])));
+
+        return $message === '' ? '' : " ({$message})";
     }
 
     protected function api(): PendingRequest

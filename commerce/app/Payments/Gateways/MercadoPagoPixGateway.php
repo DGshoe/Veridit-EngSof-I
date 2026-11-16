@@ -58,7 +58,7 @@ class MercadoPagoPixGateway extends MercadoPagoGateway
         $qrImage = $response->json('point_of_interaction.transaction_data.qr_code_base64');
 
         if (! $response->successful() || ! $response->json('id') || ! $qrCode || ! $qrImage) {
-            throw new RuntimeException('Mercado Pago recusou a cobrança PIX: HTTP '.$response->status());
+            throw new RuntimeException('Mercado Pago recusou a cobrança PIX: HTTP '.$response->status().$this->providerError($response));
         }
 
         return new Charge((string) $response->json('id'), [
