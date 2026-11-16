@@ -77,8 +77,11 @@ class MercadoPagoGateway implements PaymentGateway
             throw new RuntimeException('Mercado Pago recusou a preferência: HTTP '.$response->status().$this->providerError($response));
         }
 
+        // Test credentials ("TEST-...") only work on the sandbox checkout page
+        $sandbox = str_starts_with((string) $this->config['access_token'], 'TEST-') && $response->json('sandbox_init_point');
+
         return new Charge((string) $response->json('id'), [
-            'checkout_url' => $response->json('init_point'),
+            'checkout_url' => $sandbox ? $response->json('sandbox_init_point') : $response->json('init_point'),
             'sandbox_checkout_url' => $response->json('sandbox_init_point'),
             'instructions' => 'Abra checkout_url para pagar com cartão, saldo Mercado Pago ou PIX. Total: '.Money::brl($order->amount_cents).'.',
         ]);

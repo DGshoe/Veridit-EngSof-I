@@ -64,6 +64,24 @@ class OrderTest extends TestCase
         $this->getJson('/api/v1/credits/costs')->assertOk()->assertExactJson(['data' => ['imagem' => 1, 'video' => 2]]);
     }
 
+    public function test_payment_methods_lists_only_what_is_enabled(): void
+    {
+        // phpunit.xml: simulator on, Mercado Pago without credentials
+        $this->getJson('/api/v1/payment-methods')->assertOk()
+            ->assertJsonCount(1, 'data')->assertJsonPath('data.0.code', 'simulador');
+
+        config(['commerce.payments.mercadopago.access_token' => 'TEST-x', 'commerce.payments.mercadopago.webhook_secret' => 's',
+            'commerce.payments.mercadopago.notification_url' => 'https://x.test/w', 'commerce.payments.mercadopago.pix_enabled' => true]);
+
+        $this->getJson('/api/v1/payment-methods')->assertOk()
+            ->assertJsonPath('data.*.code', ['pix', 'mercadopago', 'simulador'])
+            ->assertJsonPath('data.0.name', 'PIX');
+
+        config(['commerce.payments.simulator.enabled' => false, 'commerce.payments.mercadopago.pix_enabled' => false]);
+
+        $this->getJson('/api/v1/payment-methods')->assertOk()->assertJsonPath('data.*.code', ['mercadopago']);
+    }
+
     // ---------------- create order ----------------
 
     public function test_creates_pending_order_with_billing_from_identity(): void

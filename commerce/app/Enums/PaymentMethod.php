@@ -22,6 +22,20 @@ enum PaymentMethod: string
     }
 
     /**
+     * Name and description shown on the payment choice screen.
+     *
+     * @return array{name: string, description: string}
+     */
+    public function presentation(): array
+    {
+        return match ($this) {
+            self::Pix => ['name' => 'PIX', 'description' => 'QR Code ou PIX copia e cola, aprovação em segundos.'],
+            self::MercadoPago => ['name' => 'Mercado Pago', 'description' => 'Cartão de crédito, saldo Mercado Pago ou PIX na página do Mercado Pago.'],
+            self::Simulator => ['name' => 'Simulador', 'description' => 'Ambiente de testes: nenhum valor é cobrado.'],
+        };
+    }
+
+    /**
      * Who confirms payments of this method (sends the webhook). PIX is charged through
      * Mercado Pago's payments API, so its notifications arrive at the Mercado Pago webhook.
      */

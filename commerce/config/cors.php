@@ -24,7 +24,8 @@ return [
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With'],
+    // Idempotency-Key: POST /orders (the front sends one per checkout to avoid double purchases)
+    'allowed_headers' => ['Content-Type', 'Authorization', 'Accept', 'X-Requested-With', 'Idempotency-Key'],
 
     'exposed_headers' => [],
 

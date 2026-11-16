@@ -15,6 +15,7 @@ Route::prefix('v1')->group(function () {
     // Public catalog (D2)
     Route::get('/packages', [PackageController::class, 'index']);
     Route::get('/credits/costs', [PackageController::class, 'captureCosts']);
+    Route::get('/payment-methods', [PackageController::class, 'paymentMethods']);
 
     // Identity JWT (RS256, verified with Identity's public key)
     Route::middleware('auth:api')->group(function () {

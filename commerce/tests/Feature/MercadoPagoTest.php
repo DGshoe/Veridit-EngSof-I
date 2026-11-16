@@ -122,7 +122,8 @@ class MercadoPagoTest extends TestCase
     {
         $order = $this->newOrder('medio');
 
-        $this->assertSame('https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=abc', $order->payment_data['checkout_url']);
+        // TEST- credentials: only the sandbox checkout works
+        $this->assertSame('https://sandbox.mercadopago.com.br/checkout/v1/redirect?pref_id=abc', $order->payment_data['checkout_url']);
         $this->assertStringStartsWith('123456-pref-', $order->provider_payment_id);
 
         Http::assertSent(function (Request $request) use ($order) {
@@ -141,6 +142,15 @@ class MercadoPagoTest extends TestCase
                 && str_contains($body['back_urls']['success'], $order->id)
                 && ! isset($body['auto_return']); // http back_url: MP requires https for auto_return
         });
+    }
+
+    public function test_production_credentials_use_the_real_checkout(): void
+    {
+        config(['commerce.payments.mercadopago.access_token' => 'APP_USR-token-de-producao']);
+
+        $order = $this->newOrder('basico');
+
+        $this->assertSame('https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=abc', $order->payment_data['checkout_url']);
     }
 
     public function test_mercadopago_unavailable_when_not_configured(): void
