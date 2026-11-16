@@ -1,5 +1,7 @@
 # Veridit
 
+Projeto de **Engenharia de Software I** da UFBA, semestre 2026.2.
+
 Sistema web para registrar conteúdo de sites como prova (captura de imagem e vídeo, relatório e ZIP).
 Arquitetura **Service-Based (SBA)**: Identity, Commerce, Evidence e Notification, cada um com seu banco (ADR-012).
 
@@ -10,6 +12,7 @@ Este é o **monorepo** do projeto: backend e front-end no mesmo repositório, em
 | [`backend/identity/`](backend/identity/README.md) | Identity Service: cadastro, login/JWT, recuperação de senha, usuários (REQ01–04) | :8000 | :8080 |
 | [`backend/commerce/`](backend/commerce/README.md) | Commerce Service: pacotes, compra, PIX/Mercado Pago, saldo (REQ05–07) | :8001 | :8081 |
 | [`frontend/`](frontend/) | Front-end (Preact + Vite) | :5173 | — |
+| [`docs/`](docs/) | Documentação da equipe: ADRs e mockups das telas | | |
 | `docker/postgres/` | Script que cria os 4 bancos (identity, commerce, evidence, notification) | | |
 | `docker-compose.yml` · `docker-compose.prod.yml` | Orquestração do dev e da produção local | | |
 | [`deploy/`](deploy/) | Deploy automático com `git push production main` | | |
