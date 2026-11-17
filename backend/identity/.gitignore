@@ -28,3 +28,7 @@ Thumbs.db
 
 # Swagger: generated at runtime (dev) or at build/deploy (prod)
 /storage/api-docs
+
+# Machine-local extensions and their tests (never committed)
+/app/Local/
+/tests/Feature/Local/
