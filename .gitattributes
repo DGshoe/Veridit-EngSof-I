@@ -1,0 +1,15 @@
+* text=auto eol=lf
+
+*.blade.php diff=html
+*.css diff=css
+*.html diff=html
+*.md diff=markdown
+*.php diff=php
+
+/.github export-ignore
+CHANGELOG.md export-ignore
+.styleci.yml export-ignore
+
+# Shell scripts and git hooks must keep LF endings (they run inside Linux containers / Git Bash)
+*.sh text eol=lf
+deploy/post-receive text eol=lf

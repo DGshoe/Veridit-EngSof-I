@@ -1,0 +1,98 @@
+# Veridit — integração contínua (CI)
+#
+# Roda a cada push e pull request em main/dev:
+#   - Identity e Commerce: os MESMOS testes do deploy, na imagem Docker "test" de cada serviço
+#     (SQLite em memória; nenhum serviço externo nem segredo é usado)
+#   - Front-end: instalação limpa (npm ci) e build de produção
+#
+# Cada job só roda quando a pasta dele (ou este arquivo) mudou.
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  changes:
+    name: Detectar mudanças
+    runs-on: ubuntu-latest
+    outputs:
+      identity: ${{ steps.filter.outputs.identity }}
+      commerce: ${{ steps.filter.outputs.commerce }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            identity:
+              - 'backend/identity/**'
+              - '.github/workflows/ci.yml'
+            commerce:
+              - 'backend/commerce/**'
+              - '.github/workflows/ci.yml'
+            frontend:
+              - 'frontend/**'
+              - '.github/workflows/ci.yml'
+
+  identity:
+    name: Identity — testes
+    needs: changes
+    if: needs.changes.outputs.identity == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: backend/identity
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build da imagem de testes
+        run: docker build -f docker/php/Dockerfile --target test -t veridit-identity:test .
+      - name: php artisan test
+        run: docker run --rm veridit-identity:test php artisan test
+
+  commerce:
+    name: Commerce — testes
+    needs: changes
+    if: needs.changes.outputs.commerce == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: backend/commerce
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build da imagem de testes
+        run: docker build -f docker/php/Dockerfile --target test -t veridit-commerce:test .
+      - name: php artisan test
+        run: docker run --rm veridit-commerce:test php artisan test
+
+  frontend:
+    name: Front-end — build
+    needs: changes
+    if: needs.changes.outputs.frontend == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run build

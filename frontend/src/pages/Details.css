@@ -1,0 +1,178 @@
+.details-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* 
+  Ajusta o container principal:
+  - Centraliza o container na tela (margin: 0 auto)
+  - Remove o alinhamento forçado à esquerda
+*/
+.details-layout .page-layout-container {
+  max-width: 1200px !important; 
+  margin: 0 auto; 
+  align-items: center !important; /* Centraliza os blocos internos */
+}
+
+/* 
+  Força o cabeçalho a ter a mesma largura dos cards e ficar no centro.
+  O margin: 0 auto é o truque de mestre aqui.
+*/
+.details-layout .page-layout-header-wrapper {
+  width: 100%;
+  max-width: 1100px; 
+  margin: 0 auto 24px auto; 
+}
+
+.btn-voltar {
+  font-size: 14px;
+  color: #0b3b2e;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  font-weight: 500;
+}
+
+.btn-voltar:hover {
+  color: #07291f;
+}
+
+/* Grid centralizado */
+.details-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px; 
+  width: 100%;
+  max-width: 1100px; 
+  margin: 0 auto; /* Centraliza o grid na tela */
+}
+
+/* Estilo base dos cards */
+.details-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- COLUNA ESQUERDA (Navegador) --- */
+.fake-browser {
+  background-color: #f0f4f1; 
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.browser-url {
+  background-color: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: #4b5563;
+  margin-bottom: 16px;
+  font-family: monospace;
+}
+
+.browser-view {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 4px;
+  border-left: 4px solid #2d5a4c; 
+}
+
+.browser-view h4 {
+  margin: 0 0 8px 0;
+  color: #111827;
+  font-size: 15px;
+}
+
+.browser-view p {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.browser-view p:last-child {
+  margin-bottom: 0;
+}
+
+.details-actions {
+  margin-top: auto; 
+}
+
+.btn-primary {
+  background-color: #0b3b2e;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: #07291f;
+}
+
+/* --- COLUNA DIREITA (Lista) --- */
+.details-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #0b3b2e;
+  margin: 0 0 16px 0;
+}
+
+.details-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.details-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid #f3f4f6; 
+  font-size: 14px;
+}
+
+.details-list li:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.details-list span {
+  color: #6b7280; 
+}
+
+.details-list strong {
+  color: #111827; 
+  font-weight: 600;
+}
+
+.details-list .status-concluido {
+  color: #0b3b2e; 
+}
+
+/* Responsividade */
+@media (max-width: 900px) {
+  .details-layout .page-layout-header-wrapper,
+  .details-content {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .details-content {
+    grid-template-columns: 1fr;
+  }
+}

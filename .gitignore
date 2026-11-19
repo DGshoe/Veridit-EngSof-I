@@ -1,0 +1,13 @@
+# Monorepo Veridit — each project (backend/identity, backend/commerce, frontend)
+# has its own .gitignore; this one covers the repository root.
+
+# Orchestration secrets (database passwords): never in Git
+/.env
+/.env.production
+/.env.backup
+
+# OS / editors
+.DS_Store
+Thumbs.db
+/.idea
+/.vscode

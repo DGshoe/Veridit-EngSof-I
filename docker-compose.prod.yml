@@ -1,0 +1,156 @@
+# Veridit — PRODUÇÃO LOCAL (Identity :8080 e Commerce :8081)
+#   docker compose -p veridit_prod -f docker-compose.prod.yml --env-file .env.production up -d
+# Normalmente executado pelo hook de deploy (deploy/post-receive).
+# Containers, rede e volumes separados do ambiente de dev (projeto veridit_prod).
+# Todas as portas publicadas apenas em 127.0.0.1.
+
+name: veridit_prod
+
+x-postgres: &postgres
+  image: postgres:16-alpine
+  restart: unless-stopped
+  healthcheck:
+    test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U postgres -d $${APP_DB_NAME}"]
+    interval: 5s
+    timeout: 5s
+    retries: 20
+    start_period: 10s
+
+x-app: &app
+  build:
+    context: ./backend/identity
+    dockerfile: docker/php/Dockerfile
+    target: production
+  image: veridit-identity:prod
+  env_file: ./backend/identity/.env.production
+  restart: unless-stopped
+
+x-commerce: &commerce
+  build:
+    context: ./backend/commerce
+    dockerfile: docker/php/Dockerfile
+    target: production
+  image: veridit-commerce:prod
+  env_file: ./backend/commerce/.env.production
+  restart: unless-stopped
+
+services:
+  app:
+    <<: *app
+    depends_on:
+      identity-db:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+
+  # Worker da fila (e-mails de recuperação de senha — REQ02)
+  queue:
+    <<: *app
+    command: ["php", "artisan", "queue:work", "--tries=3", "--sleep=1", "--max-time=3600"]
+    depends_on:
+      app:
+        condition: service_started
+
+  web:
+    build:
+      context: ./backend/identity
+      dockerfile: docker/nginx/Dockerfile
+    image: veridit-identity-web:prod
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:80"
+    depends_on:
+      - app
+
+  # ---------------- Commerce Service (backend/commerce/) ----------------
+  commerce-app:
+    <<: *commerce
+    depends_on:
+      commerce-db:
+        condition: service_healthy
+      web:
+        condition: service_started
+
+  # Worker da fila do Commerce
+  commerce-queue:
+    <<: *commerce
+    command: ["php", "artisan", "queue:work", "--tries=3", "--sleep=1", "--max-time=3600"]
+    depends_on:
+      commerce-app:
+        condition: service_started
+
+  commerce-web:
+    build:
+      context: ./backend/commerce
+      dockerfile: docker/nginx/Dockerfile
+    image: veridit-commerce-web:prod
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8081:80"
+    depends_on:
+      - commerce-app
+
+  identity-db:
+    <<: *postgres
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_ADMIN_PASSWORD:?defina POSTGRES_ADMIN_PASSWORD no .env.production}
+      APP_DB_NAME: identity
+      APP_DB_USER: identity_app
+      APP_DB_PASSWORD: ${IDENTITY_DB_PASSWORD:?defina IDENTITY_DB_PASSWORD no .env.production}
+    ports:
+      - "127.0.0.1:5442:5432"   # só para inspeção
+    volumes:
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
+      - identity_db_data:/var/lib/postgresql/data
+
+  commerce-db:
+    <<: *postgres
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_ADMIN_PASSWORD:?defina POSTGRES_ADMIN_PASSWORD no .env.production}
+      APP_DB_NAME: commerce
+      APP_DB_USER: commerce_app
+      APP_DB_PASSWORD: ${COMMERCE_DB_PASSWORD:?defina COMMERCE_DB_PASSWORD no .env.production}
+    ports:
+      - "127.0.0.1:5443:5432"
+    volumes:
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
+      - commerce_db_data:/var/lib/postgresql/data
+
+  evidence-db:
+    <<: *postgres
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_ADMIN_PASSWORD:?defina POSTGRES_ADMIN_PASSWORD no .env.production}
+      APP_DB_NAME: evidence
+      APP_DB_USER: evidence_app
+      APP_DB_PASSWORD: ${EVIDENCE_DB_PASSWORD:?defina EVIDENCE_DB_PASSWORD no .env.production}
+    ports:
+      - "127.0.0.1:5444:5432"
+    volumes:
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
+      - evidence_db_data:/var/lib/postgresql/data
+
+  notification-db:
+    <<: *postgres
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_ADMIN_PASSWORD:?defina POSTGRES_ADMIN_PASSWORD no .env.production}
+      APP_DB_NAME: notification
+      APP_DB_USER: notification_app
+      APP_DB_PASSWORD: ${NOTIFICATION_DB_PASSWORD:?defina NOTIFICATION_DB_PASSWORD no .env.production}
+    ports:
+      - "127.0.0.1:5445:5432"
+    volumes:
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
+      - notification_db_data:/var/lib/postgresql/data
+
+  # Simula o provedor de e-mail. SMTP só na rede interna; interface em :8026.
+  mailpit:
+    image: axllent/mailpit:v1.33
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8026:8025"
+
+volumes:
+  identity_db_data:
+  commerce_db_data:
+  evidence_db_data:
+  notification_db_data:
